@@ -102,7 +102,8 @@ class KaspaPWA extends EventEmitter {
 				folders:[
 					{url:'/http', folder:path.join(rootFolder, "http")},
 					{url:'/kaspa-ux', folder:'/node_modules/kaspa-ux'},
-					{url:'/node_modules/@aspectron/flow-ux', folder:'/node_modules/@aspectron/flow-ux'}
+					{url:'/node_modules/@aspectron/flow-ux', folder:'/node_modules/@aspectron/flow-ux'},
+					{url:'/resources/extern', folder:'/node_modules/@aspectron/flow-ux/resources/extern'}
 				]
 			});
 			router.init();

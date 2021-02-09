@@ -119,11 +119,7 @@ class KaspaWalletApp extends FlowApp {
 				</div>
 				<div class="divider"></div>
 				<div col class='form-wrapper'>
-					<faucet-info limit="${limit}" available="${available}" address="${address}"></faucet-info>
-					<faucet-form network="${network}" .networks="${this.networks}" address="${address}" @network-change="${this.onNetworkChange}">
-						<div slot="captcha" class="g-recaptcha" 
-							data-sitekey="6LeGJSoTAAAAAKtLbjbdiIQTFK9tYLqyRx0Td-MA"></div>
-					</faucet-form>
+					<kaspa-wallet></kaspa-wallet>
 				</div>
 				<div class="divider"></div>
 			</div>
@@ -139,4 +135,4 @@ class KaspaWalletApp extends FlowApp {
 
 }
 
-KaspaFaucetApp.define("kaspa-faucet-app");
+KaspaWalletApp.define("kaspa-wallet-app");
