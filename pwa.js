@@ -50,6 +50,8 @@ class KaspaPWA extends EventEmitter {
 				secret:"34343546756767567657534578678672346573237436523798",
 				key:"kaspa-faucet-pwa"
 			};
+		}else{
+			this.http_session_ = this.config.http.session;
 		}
 
 		console.log('');
@@ -72,7 +74,6 @@ class KaspaPWA extends EventEmitter {
 				http:{
 					host,
 					port,
-					// TODO: TEMPORARY! - read from config
 					session: this.http_session_
 				},
 				staticFiles:{
@@ -88,6 +89,12 @@ class KaspaPWA extends EventEmitter {
 			app.use(bodyParser.urlencoded({ extended: true }))
 
 			let rootFolder = this.appFolder;
+			let config = this.config||{};
+			const {folders={}} = config;
+			const {
+				kaspaUX='/node_modules/kaspa-ux',
+				flowUX='/node_modules/@aspectron/flow-ux',
+			} = folders;
 
 			let router = new FlowRouter(app, {
 				mount:{
@@ -101,9 +108,9 @@ class KaspaPWA extends EventEmitter {
 				rootFolder,
 				folders:[
 					{url:'/http', folder:path.join(rootFolder, "http")},
-					{url:'/kaspa-ux', folder:'/node_modules/kaspa-ux'},
-					{url:'/node_modules/@aspectron/flow-ux', folder:'/node_modules/@aspectron/flow-ux'},
-					{url:'/resources/extern', folder:'/node_modules/@aspectron/flow-ux/resources/extern'}
+					{url:'/kaspa-ux', folder:kaspaUX},
+					{url:'/node_modules/@aspectron/flow-ux', folder:flowUX},
+					{url:'/resources/extern', folder:flowUX+'/resources/extern'}
 				]
 			});
 			router.init();
