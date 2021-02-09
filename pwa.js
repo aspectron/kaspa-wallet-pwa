@@ -91,6 +91,7 @@ class KaspaPWA extends EventEmitter {
 
 			let router = new FlowRouter(app, {
 				mount:{
+					// flowUX:'/node_modules/@aspectron/flow-ux',
 					flowUX:"/flow/flow-ux",
 					litHtml:'/lit-html',
 					litElement:'/lit-element',
@@ -98,7 +99,11 @@ class KaspaPWA extends EventEmitter {
 					sockjs:'/sockjs',
 				},
 				rootFolder,
-				folders:[{url:'/http', folder:path.join(rootFolder, "http")}]
+				folders:[
+					{url:'/http', folder:path.join(rootFolder, "http")},
+					{url:'/kaspa-ux', folder:'/node_modules/kaspa-ux'},
+					{url:'/node_modules/@aspectron/flow-ux', folder:'/node_modules/@aspectron/flow-ux'}
+				]
 			});
 			router.init();
 		});
