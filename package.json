@@ -1,8 +1,8 @@
 {
-		"name": "kaspa-wallet-cli",
+		"name": "kaspa-wallet-pwa",
 		"version": "0.0.2",
 		"description": "Kaspa Command Line Wallet Interface",
-		"main": "wallet.js",
+		"main": "pwa.js",
 		"scripts": {
 				"test": "echo \"Error: no test specified\" && exit 1"
 		},
