@@ -77,7 +77,8 @@ class KaspaPWA extends EventEmitter {
 					session: this.http_session_
 				},
 				staticFiles:{
-					'/':'http'
+					'/':'http',
+					'/dist':'dist'
 				}
 			}
 		});
@@ -87,6 +88,7 @@ class KaspaPWA extends EventEmitter {
 			let {app} = args;
 			app.use(bodyParser.json())
 			app.use(bodyParser.urlencoded({ extended: true }))
+			
 
 			let rootFolder = this.appFolder;
 			let config = this.config||{};
@@ -94,7 +96,30 @@ class KaspaPWA extends EventEmitter {
 			const {
 				kaspaUX='/node_modules/kaspa-ux',
 				flowUX='/node_modules/@aspectron/flow-ux',
+				walletWorker='/node_modules/kaspa-wallet-worker',
+				secp256k1='/node_modules/secp256k1-wasm/http'
 			} = folders;
+
+			console.log("walletWorker", walletWorker)
+			//kaspa-wallet-worker/worker.js
+			//app.use(express.static(secp256k1, {
+			//	index: 'false'
+			//}))
+			app.get('/kaspa-wallet-worker/worker.js', (req, res)=>{
+				res.sendFile(path.join(rootFolder, 'dist/kaspa-wallet-worker-core.js'))
+			})
+			app.get('(/kaspa-wallet-worker)?/secp256k1.wasm', (req, res)=>{
+				res.setHeader("Content-Type", "application/wasm")
+				let file = path.join(rootFolder, secp256k1, 'secp256k1.wasm');
+				let stream = fs.createReadStream(file);
+				// This will wait until we know the readable stream is actually valid before piping
+				stream.on('open', function () {
+					// This just pipes the read stream to the response object (which goes to the client)
+					stream.pipe(res);
+				});
+				//stream.pipe(res)
+				//res.sendFile(file)
+			})
 
 			let router = new FlowRouter(app, {
 				mount:{
@@ -110,6 +135,7 @@ class KaspaPWA extends EventEmitter {
 					{url:'/http', folder:path.join(rootFolder, "http")},
 					{url:'/kaspa-ux', folder:kaspaUX},
 					{url:'/node_modules/@aspectron/flow-ux', folder:flowUX},
+					{url:'/kaspa-wallet-worker', folder:walletWorker},
 					{url:'/resources/extern', folder:flowUX+'/resources/extern'}
 				]
 			});
@@ -238,8 +264,8 @@ class KaspaPWA extends EventEmitter {
 				log.level = (this.options.verbose&&'verbose')||(this.options.debug&&'debug')||(this.options.log)||'info';
 
 				await this.initHttp();
-				await this.initKaspa();
-				await this.initWallet();
+				//await this.initKaspa();
+				//await this.initWallet();
 			})
 
 		program.parse();
