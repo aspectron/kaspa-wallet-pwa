@@ -24,6 +24,7 @@
 		"express-session": "*",
 		"@kaspa/grpc": "*",
 		"@kaspa/grpc-node": "*",
+		"@kaspa/grpc-web": "file:../kaspa-grpc-web",
 		"@kaspa/wallet": "file:../kaspa-wallet",
 		"@kaspa/wallet-worker": "file:../kaspa-wallet-worker",
 		"@kaspa/ux": "file:../kaspa-ux",

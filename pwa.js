@@ -105,7 +105,9 @@ class KaspaPWA extends EventEmitter {
 				kaspaUX='/node_modules/kaspa-ux',
 				flowUX='/node_modules/@aspectron/flow-ux',
 				walletWorker='/node_modules/kaspa-wallet-worker',
-				secp256k1='/node_modules/secp256k1-wasm/http'
+				secp256k1='/node_modules/secp256k1-wasm/http',
+				grpcWeb='/node_modules/@kaspa/grpc-web',
+				flowGRPCWeb='/node_modules/@aspectron/flow-grpc-web'
 			} = folders;
 
 			console.log("walletWorker", walletWorker)
@@ -115,6 +117,9 @@ class KaspaPWA extends EventEmitter {
 			//}))
 			app.get('/kaspa-wallet-worker/worker.js', (req, res)=>{
 				res.sendFile(path.join(rootFolder, 'dist/kaspa-wallet-worker-core.js'))
+			})
+			app.get('/node_modules/@aspectron/flow-grpc-web/flow-grpc-web.js', (req, res)=>{
+				res.redirect('/node_modules/@aspectron/flow-grpc-web/lib/flow-grpc-web.js')
 			})
 			app.get('(/kaspa-wallet-worker)?/secp256k1.wasm', (req, res)=>{
 				res.setHeader("Content-Type", "application/wasm")
@@ -136,7 +141,7 @@ class KaspaPWA extends EventEmitter {
 					litHtml:'/lit-html',
 					litElement:'/lit-element',
 					webcomponents:'/webcomponentsjs',
-					sockjs:'/sockjs',
+					sockjs:'/sockjs'
 				},
 				rootFolder,
 				folders:[
@@ -144,7 +149,9 @@ class KaspaPWA extends EventEmitter {
 					{url:'/kaspa-ux', folder:kaspaUX},
 					{url:'/node_modules/@aspectron/flow-ux', folder:flowUX},
 					{url:'/kaspa-wallet-worker', folder:walletWorker},
-					{url:'/resources/extern', folder:flowUX+'/resources/extern'}
+					{url:'/resources/extern', folder:flowUX+'/resources/extern'},
+					{url:'/@kaspa/grpc-web', folder:grpcWeb},
+					{url:'/node_modules/@aspectron/flow-grpc-web', folder:flowGRPCWeb}
 				]
 			});
 			router.init();
