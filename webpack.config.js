@@ -25,6 +25,8 @@ module.exports = {
       "/style/style.js": "/http/style/style.js",
       "/flow/flow-ux/flow-ux.js": path.join(root, "node_modules/@aspectron/flow-ux/flow-ux.js"),
       "/@kaspa/ux/kaspa-ux.js": path.join(root, "node_modules/@kaspa/ux/kaspa-ux.js"),
+      "/@kaspa/grpc-web": path.join(root, "./node_modules/@kaspa/grpc-web"),
+      "@aspectron/flow-grpc-web": path.join(root, "./node_modules/@aspectron/flow-grpc-web"),
       //"kaspa-wallet-worker": "../kaspa-wallet-worker",
       //"/kaspa-wallet-worker/kaspa-wallet-worker.js": "../kaspa-wallet-worker/kaspa-wallet-worker.js"
     },
