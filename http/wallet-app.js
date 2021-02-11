@@ -143,7 +143,7 @@ class KaspaWalletApp extends FlowApp {
 		this.wallet.setRPCBuilder(()=>{
 			return {
 				rpc: new RPC({clientConfig:{path:"/rpc"}}),
-				network: "testnet"
+				network: "kaspatest"
 			}
 		});
 	}
