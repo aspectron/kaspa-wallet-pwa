@@ -35,6 +35,7 @@ module.exports = {
       "buffer": require.resolve("buffer/"),
       "url": require.resolve("url/"),
       "assert": require.resolve("assert/"),
+      "process": require.resolve("process/browser"),
       "crypto": false,
       "os": false,
       "nw.gui": false,
@@ -61,6 +62,7 @@ module.exports = {
     //new webpack.optimize.DedupePlugin()
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
+      process: 'process',
     })
   ],
   stats:{

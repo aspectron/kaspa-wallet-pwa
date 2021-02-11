@@ -13,6 +13,12 @@
 		"@aspectron/flow-router": "aspectron/flow-router",
 		"@aspectron/flow-utils": "*",
 		"@aspectron/flow-ux": "aspectron/flow-ux",
+		"@kaspa/grpc": "*",
+		"@kaspa/grpc-node": "*",
+		"@kaspa/grpc-web": "file:../kaspa-grpc-web",
+		"@kaspa/ux": "file:../kaspa-ux",
+		"@kaspa/wallet": "file:../kaspa-wallet",
+		"@kaspa/wallet-worker": "file:../kaspa-wallet-worker",
 		"@webcomponents/webcomponentsjs": "*",
 		"buffer": "^6.0.3",
 		"colors": "*",
@@ -22,12 +28,6 @@
 		"decimal.js": "^10.2.1",
 		"express": "*",
 		"express-session": "*",
-		"@kaspa/grpc": "*",
-		"@kaspa/grpc-node": "*",
-		"@kaspa/grpc-web": "file:../kaspa-grpc-web",
-		"@kaspa/wallet": "file:../kaspa-wallet",
-		"@kaspa/wallet-worker": "file:../kaspa-wallet-worker",
-		"@kaspa/ux": "file:../kaspa-ux",
 		"lit-element": "*",
 		"sockjs": "*",
 		"sockjs-client": "*",
@@ -35,7 +35,8 @@
 		"ws": "^7.4.2"
 	},
 	"devDependencies": {
-		"assert": "^2.0.0",
+		"assert": "*",
+		"process": "^0.11.10",
 		"webpack": "^5.21.2",
 		"webpack-cli": "^4.5.0"
 	}
