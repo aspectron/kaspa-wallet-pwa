@@ -23,9 +23,8 @@ const {FlowHttp} = require('@aspectron/flow-http')({
 	CookieSignature,
 });
 const Decimal = require('decimal.js');
-const { Wallet, initKaspaFramework, log } = require('kaspa-wallet-worker');
-
-const { RPC } = require('kaspa-grpc-node');
+const { Wallet, initKaspaFramework, log } = require('@kaspa/wallet-worker');
+const { RPC } = require('@kaspa/grpc-node');
 
 class KaspaPWA extends EventEmitter {
 	constructor(appFolder){
