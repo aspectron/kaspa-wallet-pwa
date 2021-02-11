@@ -38,7 +38,8 @@ module.exports = {
       "url": require.resolve("url/"),
       "assert": require.resolve("assert/"),
       "process": require.resolve("process/browser"),
-      "crypto": false,
+      "crypto": require.resolve("crypto-browserify"),
+      "stream": require.resolve("stream-browserify"),
       "os": false,
       "nw.gui": false,
       "@kaspa/wallet-worker": require.resolve("./node_modules/@kaspa/wallet-worker")

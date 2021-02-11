@@ -2,7 +2,7 @@ import {RPC} from '/@kaspa/grpc-web';
 console.log("RPC", RPC)
 import '/style/style.js';
 import {dpc, camelCase, html, UID, FlowApp, FlowFormat } from '/flow/flow-ux/flow-ux.js';
-export *  from '/@kaspa/ux/kaspa-ux.js';
+export * from '/@kaspa/ux/kaspa-ux.js';
 // export *  from './faucet-info.js';
 // export *  from './faucet-balance.js';
 // export *  from './faucet-transactions.js';
@@ -133,6 +133,19 @@ class KaspaWalletApp extends FlowApp {
 	onNetworkChange(e){
 		console.log("on-network-change", e.detail)
 		this.network = e.detail.network;
+	}
+
+	firstUpdated(){
+		super.firstUpdated();
+		console.log("app: firstUpdated")
+		this.wallet = this.renderRoot.querySelector("kaspa-wallet");
+		console.log("this.wallet", this.wallet)
+		this.wallet.setRPCBuilder(()=>{
+			return {
+				rpc: new RPC({clientConfig:{path:"/rpc"}}),
+				network: "testnet"
+			}
+		});
 	}
 
 }
