@@ -121,7 +121,7 @@ class KaspaWalletApp extends FlowApp {
 				</div>
 				<div class="divider"></div>
 				<div col class='form-wrapper'>
-					<kaspa-wallet></kaspa-wallet>
+					<kaspa-wallet walletMeta='{"generator":"pwa"}'></kaspa-wallet>
 				</div>
 				<div class="divider"></div>
 			</div>

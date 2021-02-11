@@ -102,9 +102,9 @@ class KaspaPWA extends EventEmitter {
 			let config = this.config||{};
 			const {folders={}} = config;
 			const {
-				kaspaUX='/node_modules/kaspa-ux',
+				kaspaUX='/node_modules/@kaspa/ux',
 				flowUX='/node_modules/@aspectron/flow-ux',
-				walletWorker='/node_modules/kaspa-wallet-worker',
+				walletWorker='/node_modules/@kaspa/wallet-worker',
 				secp256k1='/node_modules/secp256k1-wasm/http',
 				grpcWeb='/node_modules/@kaspa/grpc-web',
 				flowGRPCWeb='/node_modules/@aspectron/flow-grpc-web'
@@ -112,9 +112,9 @@ class KaspaPWA extends EventEmitter {
 
 			console.log("walletWorker", walletWorker)
 			//kaspa-wallet-worker/worker.js
-			//app.use(express.static(secp256k1, {
-			//	index: 'false'
-			//}))
+			app.use('/resources', express.static( path.join(kaspaUX, "resources"), {
+				index: 'false'
+			}))
 			app.get('/kaspa-wallet-worker/worker.js', (req, res)=>{
 				res.sendFile(path.join(rootFolder, 'dist/kaspa-wallet-worker-core.js'))
 			})
