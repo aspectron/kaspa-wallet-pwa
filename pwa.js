@@ -14,6 +14,9 @@ const Cookie = require("cookie");
 const CookieSignature = require("cookie-signature");
 const { Command, CommanderError } = require('commander');
 const ws = require('ws');
+const grpc = require('@grpc/grpc-js');
+const protoLoader = require('@grpc/proto-loader');
+
 const {FlowHttp} = require('@aspectron/flow-http')({
 	express,
 	session,
@@ -21,6 +24,7 @@ const {FlowHttp} = require('@aspectron/flow-http')({
 	ws,
 	Cookie,
 	CookieSignature,
+	grpc, protoLoader
 });
 const Decimal = require('decimal.js');
 const { Wallet, initKaspaFramework, log } = require('@kaspa/wallet-worker');
@@ -78,6 +82,11 @@ class KaspaPWA extends EventEmitter {
 				staticFiles:{
 					'/':'http',
 					'/dist':'dist'
+				},
+				grpc:{
+					protoPath:path.join(this.appFolder, "node_modules", "@kaspa/grpc", "messages.proto"),
+					server:"localhost:16210",
+					packageKey:"protowire"
 				}
 			}
 		});

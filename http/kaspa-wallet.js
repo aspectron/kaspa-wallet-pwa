@@ -1,1 +1,1 @@
-export * from "kaspa-wallet";
+export * from "@kaspa/wallet";

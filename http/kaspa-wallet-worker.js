@@ -1,4 +1,4 @@
-export * from "kaspa-wallet-worker";
+export * from "@kaspa/wallet-worker";
 
 let a = 0;
 export const test = ()=>{ console.log("test::::", a++)}

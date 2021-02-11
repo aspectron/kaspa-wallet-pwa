@@ -23,8 +23,8 @@ module.exports = {
     //aliasFields: ['browser'],
     alias:{
       "/style/style.js": "/http/style/style.js",
-      "/flow/flow-ux/flow-ux.js": path.join(root, "../flow-ux/flow-ux.js"),
-      "/kaspa-ux/kaspa-ux.js": path.join(root, "../kaspa-ux/kaspa-ux.js"),
+      "/flow/flow-ux/flow-ux.js": path.join(root, "node_modules/@aspectron/flow-ux/flow-ux.js"),
+      "/@kaspa/ux/kaspa-ux.js": path.join(root, "node_modules/@kaspa/ux/kaspa-ux.js"),
       //"kaspa-wallet-worker": "../kaspa-wallet-worker",
       //"/kaspa-wallet-worker/kaspa-wallet-worker.js": "../kaspa-wallet-worker/kaspa-wallet-worker.js"
     },
@@ -38,7 +38,7 @@ module.exports = {
       "crypto": false,
       "os": false,
       "nw.gui": false,
-      "kaspa-wallet-worker": require.resolve("../kaspa-wallet-worker")
+      "@kaspa/wallet-worker": require.resolve("./node_modules/@kaspa/wallet-worker")
   	}
   },
   output: {
