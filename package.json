@@ -1,6 +1,6 @@
 {
   "name": "@kaspa/wallet-pwa",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Kaspa Command Line Wallet Interface",
   "main": "pwa.js",
   "scripts": {
@@ -14,8 +14,8 @@
     "@aspectron/flow-grpc-web": "file:../flow-grpc-web",
     "@aspectron/flow-utils": "*",
     "@aspectron/flow-ux": "aspectron/flow-ux",
-    "@kaspa/grpc": ">=0.0.4",
-    "@kaspa/grpc-node": ">=0.0.3",
+    "@kaspa/grpc": ">=0.0.5",
+    "@kaspa/grpc-node": ">=0.0.4",
     "@kaspa/grpc-web": "file:../kaspa-grpc-web",
     "@kaspa/ux": "file:../kaspa-ux",
     "@kaspa/wallet": ">=0.0.4",
