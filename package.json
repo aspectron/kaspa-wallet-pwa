@@ -4,7 +4,7 @@
   "description": "Kaspa Command Line Wallet Interface",
   "main": "pwa.js",
   "scripts": {
-    "prepare":"npx webpack"
+    "prepare": "npx webpack"
   },
   "author": "ASPECTRON Inc.",
   "license": "ISC",
