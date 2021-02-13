@@ -17,7 +17,7 @@
     "@kaspa/grpc": ">=0.0.5",
     "@kaspa/grpc-node": ">=0.0.4",
     "@kaspa/grpc-web": "*",
-    "@kaspa/ux": "file:../kaspa-ux",
+    "@kaspa/ux": "*",
     "@kaspa/wallet": ">=0.0.4",
     "@kaspa/wallet-worker": ">=0.0.4",
     "@webcomponents/webcomponentsjs": "*",
