@@ -12,7 +12,7 @@ module.exports = {
   },
   //mode: "production",
   mode: "development",
-  watch: true,
+  watch: false,
   /*externals_:{
     "/style/style___.js": "/style/style.js",
     "/flow/flow-ux/flow-ux.js": "/flow/flow-ux/flow-ux.js",
