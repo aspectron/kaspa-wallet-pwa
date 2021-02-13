@@ -1,12 +1,33 @@
 import {RPC} from '/@kaspa/grpc-web';
 //console.log("RPC", RPC)
 import '/style/style.js';
-import {dpc, camelCase, html, UID, FlowApp, FlowFormat } from '/flow/flow-ux/flow-ux.js';
+import {dpc, camelCase, html, css, UID, FlowApp, FlowFormat, BaseElement } from '/flow/flow-ux/flow-ux.js';
+import {isSmallScreen} from '/@kaspa/ux/kaspa-ux.js';
 export * from '/@kaspa/ux/kaspa-ux.js';
-// export *  from './faucet-info.js';
-// export *  from './faucet-balance.js';
-// export *  from './faucet-transactions.js';
-// export *  from './kaspa-transaction.js';
+
+class KaspaWalletHeader extends BaseElement{
+	static get styles(){
+		return css`
+			:host{display:block}
+			.container{
+				display:flex;align-items:center;padding:5px;
+			}
+			.logo{height:30px;width:30px;background-color:#DDD}
+			.flex{flex:1}
+
+		`
+	}
+	render(){
+		return html`
+			<div class="container">
+				<div class="logo"></div>
+				<div class="flex"></div>
+				<a class="link">About us</a>
+			</div>
+		`
+	}
+}
+KaspaWalletHeader.define("kaspa-wallet-header")
 
 class KaspaWalletApp extends FlowApp {
 
@@ -109,24 +130,11 @@ class KaspaWalletApp extends FlowApp {
 		let address = this.addresses?.[this.network] || '';
 		let limit = this.limits?.[this.network] || '';
 		let available = this.available?.[this.network] || '';
+		let meta = {"generator":"pwa"}
 
 		return html`
-		<flow-app-layout no-drawer no-header>
-		<div slot="main" class="main-area flex sbar" col>
-			<div for="home" row class="content">
-				<div class="divider"></div>
-				<div col class="balance-wrapper">
-					<faucet-balance network="${network}"></faucet-balance>
-					<faucet-transactions network="${network}"></faucet-transactions>
-				</div>
-				<div class="divider"></div>
-				<div col class='form-wrapper'>
-					<kaspa-wallet walletMeta='{"generator":"pwa"}'></kaspa-wallet>
-				</div>
-				<div class="divider"></div>
-			</div>
-		</div>
-		</flow-app-layout>
+		${isSmallScreen?'':html`<kaspa-wallet-header></kaspa-wallet-header>`}
+		<kaspa-wallet .walletMeta='${meta}'></kaspa-wallet>
 		`
 	}
 

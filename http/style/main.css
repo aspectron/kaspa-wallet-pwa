@@ -1,5 +1,8 @@
 body{
 	--kaspa-wallet-top-menu-top:10px;
-	--flow-app-height:100%;
 }
-kaspa-wallet-app{flex:1;overflow:auto;position:relative;}
+kaspa-wallet-app{
+	flex:1;overflow:hidden;position:relative;
+	display:flex;flex-direction:column;
+}
+kaspa-wallet{flex:1;height:100px}
