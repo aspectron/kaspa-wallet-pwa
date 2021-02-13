@@ -9,7 +9,7 @@
   "author": "ASPECTRON Inc.",
   "license": "ISC",
   "dependencies": {
-    "@aspectron/flow-http": "*",
+    "@aspectron/flow-http": ">=0.2.5",
     "@aspectron/flow-router": "*",
     "@aspectron/flow-grpc-web": "*",
     "@aspectron/flow-utils": "*",
