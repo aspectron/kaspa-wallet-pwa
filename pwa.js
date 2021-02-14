@@ -70,6 +70,10 @@ class KaspaPWA extends EventEmitter {
 
 		const { host, port } = this.options;
 
+		let ssl = true;
+		if(this.options.ssl === false)
+			ssl = false;
+
 		let flowHttp = new FlowHttp(__dirname, {
 			config:{
 				websocketMode:"RPC",
@@ -82,7 +86,7 @@ class KaspaPWA extends EventEmitter {
 					host,
 					port,
 					session: this.http_session_,
-					ssl:true
+					ssl
 				},
 				staticFiles:{
 					'/':'http',
@@ -260,6 +264,7 @@ class KaspaPWA extends EventEmitter {
 			.option('--testnet','use testnet network')
 			.option('--devnet','use devnet network')
 			.option('--simnet','use simnet network')
+			.option('--no-ssl','disable SSL')
 			.option('--host <host>','http host (default: localhost)', 'localhost')
 			.option('--port <port>',`set http port (default ${this.options.port})`, (port)=>{
 				port = parseInt(port);
@@ -279,8 +284,8 @@ class KaspaPWA extends EventEmitter {
 				let options = program.opts();
 				Object.entries(options).forEach(([k,v])=>{ if(v === undefined) delete options[k]; })
 				Object.assign(this.options, options);
-				// console.log(this.options);
-				// return;
+				//  console.log(this.options);
+				//  return;
 
 				log.level = (this.options.verbose&&'verbose')||(this.options.debug&&'debug')||(this.options.log)||'info';
 
