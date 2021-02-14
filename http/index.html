@@ -83,6 +83,23 @@
 	<svg style="display:none">
 		<use href="/fonts/fontawesome/sprites/light.svg#home" />
 	</svg>
-	<kaspa-wallet-app></kaspa-wallet-app>
+	<!--kaspa-wallet-app></kaspa-wallet-app-->
+	<video id="live" width="320" height="240" autoplay style="border:5px solid #000000; display:none;"> </video>
+	<canvas id="canvas" style="border:5px solid #000000"> </canvas>
+	<script type="module">
+		import {QrScanner} from '/flow-qrscanner/index.js';
+		QrScanner.onReady = async()=>{
+			let list = await QrScanner.getCameras();
+			//alert("list:"+JSON.stringify(list, null, "\t"))
+			console.log("list", list)
+			const video = document.getElementById("live");
+			const canvas = document.getElementById("canvas");
+			await QrScanner.scan({
+				cameraId:(list[1]||list[0]).id,
+				video,
+				canvas
+			})
+		}
+	</script>
 </body>
 </html>

@@ -74,10 +74,15 @@ class KaspaPWA extends EventEmitter {
 			config:{
 				websocketMode:"RPC",
 				websocketPath:"/rpc",
+				certificates:{
+					key: './certificates/pwa.key',
+					crt: './certificates/pwa.crt'
+				},
 				http:{
 					host,
 					port,
-					session: this.http_session_
+					session: this.http_session_,
+					ssl:true
 				},
 				staticFiles:{
 					'/':'http',
@@ -151,7 +156,8 @@ class KaspaPWA extends EventEmitter {
 					{url:'/kaspa-wallet-worker', folder:walletWorker},
 					{url:'/resources/extern', folder:flowUX+'/resources/extern'},
 					{url:'/@kaspa/grpc-web', folder:grpcWeb},
-					{url:'/node_modules/@aspectron/flow-grpc-web', folder:flowGRPCWeb}
+					{url:'/node_modules/@aspectron/flow-grpc-web', folder:flowGRPCWeb},
+					{url:'/flow-qrscanner', folder:'../flow-qrscanner'}
 				]
 			});
 			router.init();
