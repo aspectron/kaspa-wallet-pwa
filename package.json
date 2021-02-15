@@ -13,7 +13,7 @@
     "@aspectron/flow-router": "*",
     "@aspectron/flow-grpc-web": "*",
     "@aspectron/flow-utils": "*",
-    "@aspectron/flow-ux": ">=0.1.17",
+    "@aspectron/flow-ux": ">=0.1.20",
     "@kaspa/grpc": ">=0.0.5",
     "@kaspa/grpc-node": ">=0.0.4",
     "@kaspa/grpc-web": "*",
