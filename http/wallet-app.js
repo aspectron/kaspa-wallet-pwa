@@ -2,7 +2,7 @@ import {RPC} from '/@kaspa/grpc-web';
 //console.log("RPC", RPC)
 import '/style/style.js';
 import {dpc, camelCase, html, css, UID, FlowApp, FlowFormat, BaseElement } from '/flow/flow-ux/flow-ux.js';
-import {isSmallScreen} from '/@kaspa/ux/kaspa-ux.js';
+import {isMobile} from '/@kaspa/ux/kaspa-ux.js';
 export * from '/@kaspa/ux/kaspa-ux.js';
 
 class KaspaWalletHeader extends BaseElement{
@@ -62,7 +62,7 @@ class KaspaWalletApp extends FlowApp {
 		this.registerListener("popstate", (e)=>{
 			let {menu="home", args=[]} = e.state||{};
 			console.log(`popstate: ${document.location}, state: ${JSON.stringify(e.state)}`)
-			this.setMenu(menu, args, true);
+			//this.setMenu(menu, args, true);
 		});
 	}
 
@@ -133,7 +133,7 @@ class KaspaWalletApp extends FlowApp {
 		let meta = {"generator":"pwa"}
 
 		return html`
-		${isSmallScreen?'':html`<kaspa-wallet-header></kaspa-wallet-header>`}
+		${isMobile?'':html`<kaspa-wallet-header></kaspa-wallet-header>`}
 		<kaspa-wallet .walletMeta='${meta}'></kaspa-wallet>
 		`
 	}

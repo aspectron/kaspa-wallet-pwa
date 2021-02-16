@@ -115,6 +115,10 @@ class KaspaPWA extends EventEmitter {
 				flowGRPCWeb='/node_modules/@aspectron/flow-grpc-web'
 			} = folders;
 
+			app.use(["/send/:a?", "/qrscanner/:a?"], (req, res)=>{
+				res.redirect("/")
+			})
+
 			console.log("walletWorker", walletWorker)
 			//kaspa-wallet-worker/worker.js
 			app.use('/resources', express.static( path.join(kaspaUX, "resources"), {
