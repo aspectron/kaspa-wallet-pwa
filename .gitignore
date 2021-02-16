@@ -4,3 +4,4 @@ package-lock.json
 bin/*
 dist
 __wallet.txt
+certificates/*
