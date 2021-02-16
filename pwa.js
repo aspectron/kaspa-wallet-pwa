@@ -115,7 +115,9 @@ class KaspaPWA extends EventEmitter {
 				flowGRPCWeb='/node_modules/@aspectron/flow-grpc-web'
 			} = folders;
 
-			app.use(["/send/:a?", "/qrscanner/:a?"], (req, res)=>{
+			app.use([
+				"/send/:a?", "/qrscanner/:a?", "/open/:a?",
+				"/faucet/:a?", "/seeds/:a?", "/receive/:a?"], (req, res)=>{
 				res.redirect("/")
 			})
 
