@@ -224,7 +224,6 @@ class KaspaPWA extends EventEmitter {
 		const medianShift = Math.ceil(263*0.5*1000);
 
 		const poll = async (network) => {
-			log.info('monitor init for',network);
 			const ts_ = new Date();
 			const ts = ts_.getTime() - medianShift;
 			const data = { }
@@ -242,7 +241,7 @@ class KaspaPWA extends EventEmitter {
 				const pastMedianTimeDiff = Math.max(ts - pastMedianTime, 0);
 
 				this.flowHttp.sockets.publish('network-status', {
-					blueScore,blockCount,headerCount,networkName, pastMedianTime, pastMedianTimeDiff
+					network, blueScore, blockCount, headerCount, difficulty, networkName, pastMedianTime, pastMedianTimeDiff
 				});
 			} catch(ex) {
 				console.log(ex.toString());
