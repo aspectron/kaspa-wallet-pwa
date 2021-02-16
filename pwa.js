@@ -117,7 +117,7 @@ class KaspaPWA extends EventEmitter {
 
 			app.use([
 				"/send/:a?", "/qrscanner/:a?", "/open/:a?",
-				"/faucet/:a?", "/seeds/:a?", "/receive/:a?"], (req, res)=>{
+				"/faucet/:a?", "/seeds/:a?", "/receive/:a?", "/t9/:a?"], (req, res)=>{
 				res.redirect("/")
 			})
 
