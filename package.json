@@ -9,9 +9,9 @@
   "author": "ASPECTRON Inc.",
   "license": "ISC",
   "dependencies": {
+    "@aspectron/flow-grpc-web": "*",
     "@aspectron/flow-http": ">=0.2.6",
     "@aspectron/flow-router": "*",
-    "@aspectron/flow-grpc-web": "*",
     "@aspectron/flow-utils": "*",
     "@aspectron/flow-ux": ">=0.1.20",
     "@kaspa/grpc": ">=0.0.5",
@@ -30,6 +30,7 @@
     "express": "*",
     "express-session": "*",
     "lit-element": "*",
+    "node-fetch": "^2.6.1",
     "sockjs": "*",
     "sockjs-client": "*",
     "url": "^0.11.0",

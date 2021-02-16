@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const EventEmitter = require("events");
 const FlowRouter = require('@aspectron/flow-router');
 const utils = require('@aspectron/flow-utils');
+const async = require('@aspectron/flow-async');
 //require("colors");
 const fs = require("fs");
 const args = utils.args();
@@ -16,6 +17,9 @@ const { Command, CommanderError } = require('commander');
 const ws = require('ws');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
+const fetch = require('node-fetch');
+const querystring = require('querystring');
+const Decimal = require('decimal.js');
 
 const {FlowHttp} = require('@aspectron/flow-http')({
 	express,
@@ -26,9 +30,9 @@ const {FlowHttp} = require('@aspectron/flow-http')({
 	CookieSignature,
 	grpc, protoLoader
 });
-const Decimal = require('decimal.js');
 const { Wallet, initKaspaFramework, log } = require('@kaspa/wallet-worker');
 const { RPC } = require('@kaspa/grpc-node');
+const { dpc } = require('@kaspa/wallet/dist/utils/helper');
 
 class KaspaPWA extends EventEmitter {
 	constructor(appFolder){
@@ -70,7 +74,7 @@ class KaspaPWA extends EventEmitter {
 
 		const { host, port } = this.options;
 
-		let flowHttp = new FlowHttp(__dirname, {
+		const flowHttp = this.flowHttp = new FlowHttp(__dirname, {
 			config:{
 				websocketMode:"RPC",
 				websocketPath:"/rpc",
@@ -95,7 +99,7 @@ class KaspaPWA extends EventEmitter {
 				}
 			}
 		});
-		this.flowHttp = flowHttp;
+		// this.flowHttp = flowHttp;
 
 		flowHttp.on("app.init", args=>{
 			let {app} = args;
@@ -180,9 +184,9 @@ class KaspaPWA extends EventEmitter {
 		let filter = aliases.map((alias) => { return this.options[alias] ? Wallet.networkAliases[alias] : null; }).filter(v=>v);
 
 		this.rpc = { }
-		this.wallets = { }
-		this.addresses = { }
-		this.limits = { }
+		// this.wallets = { }
+		// this.addresses = { }
+		// this.limits = { }
 
 		if(this.options.rpc && filter.length != 1) {
 			log.error('You must explicitly use the network flag when specifying the RPC option');
@@ -201,18 +205,92 @@ class KaspaPWA extends EventEmitter {
 			const rpc = this.rpc[network] = new RPC({ clientConfig:{ host } });
 			rpc.onError((error)=>{ log.error(`gRPC[${host}] ${error}`); })
 
-			this.wallets[network] = Wallet.fromMnemonic(
-				"about artefact spirit predict toast size earth slow soon allow evoke spell",
-				// "wasp involve attitude matter power weekend two income nephew super way focus",
-				{ network, rpc },
-				{disableAddressDerivation:true}
-			);
-			this.wallets[network].setLogLevel(log.level);
+			// this.wallets[network] = Wallet.fromMnemonic(
+			// 	"about artefact spirit predict toast size earth slow soon allow evoke spell",
+			// 	// "wasp involve attitude matter power weekend two income nephew super way focus",
+			// 	{ network, rpc },
+			// 	{disableAddressDerivation:true}
+			// );
+			// this.wallets[network].setLogLevel(log.level);
 
-			log.info(`${Wallet.networkTypes[network].name} address - ${this.addresses[network]}`);
+			// log.info(`${Wallet.networkTypes[network].name} address - ${this.addresses[network]}`);
 		}
 
-		this.networks = Object.keys(this.wallets);
+		this.networks = Object.keys(this.rpc);
+	}
+
+	async initMonitors() {
+		const medianOffset = 45*1000; // allow 45 sec behind median
+		const medianShift = Math.ceil(263*0.5*1000);
+
+		const poll = async (network) => {
+			log.info('monitor init for',network);
+			const ts_ = new Date();
+			const ts = ts_.getTime() - medianShift;
+			const data = { }
+
+			try {
+				const bdi = await  this.rpc[network].request('getBlockDagInfoRequest');
+				const vspbs = await  this.rpc[network].request('getVirtualSelectedParentBlueScoreRequest');
+
+				const blueScore = parseInt(vspbs.blueScore);
+				const blockCount = parseInt(bdi.blockCount);
+				const headerCount = parseInt(bdi.headerCount);
+				const difficulty = parseInt(bdi.difficulty);
+				const networkName = bdi.networkName;
+				const pastMedianTime = parseInt(bdi.pastMedianTime);
+				const pastMedianTimeDiff = Math.max(ts - pastMedianTime, 0);
+
+				this.flowHttp.sockets.publish('network-status', {
+					blueScore,blockCount,headerCount,networkName, pastMedianTime, pastMedianTimeDiff
+				});
+			} catch(ex) {
+				console.log(ex.toString());
+			}
+
+			dpc(3500, ()=>{ poll(network); });
+		}
+
+		this.monitors = { };
+		for(const network of this.networks) {
+			dpc(()=>{ poll(network); });
+		}
+
+
+	}
+
+	async initRPC() {
+		const { flowHttp } = this;
+		const faucetUrl = 'https://faucet.kaspanet.io';
+		let availableRequests = flowHttp.sockets.subscribe("faucet-request");
+		(async ()=>{
+			for await(const msg of availableRequests) {
+				const { data, ip } = msg;
+				const { address, amount } = data;
+				const sompis = Decimal(amount).mul(1e8).toNumber();
+				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/get/${address}?ip=${querystring.escape(ip)}&amount=${querystring.escape(sompis)}`, { method: 'GET' })
+				.then(res => res.json()) 
+				.then(json => msg.respond(json))
+				.catch(ex=>{
+					msg.respond({error:'Unable to request funds from faucet'});
+					console.log(ex.toString());
+				});
+			}
+		})();
+		let getRequests = flowHttp.sockets.subscribe("faucet-available");
+		(async ()=>{
+			for await(const msg of getRequests) {
+				const { data, ip } = msg;
+				const { address } = data;
+				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/available/${address}?ip=${querystring.escape(ip)}`, { method: 'GET' })
+				.then(res => res.json()) 
+				.then(json => msg.respond(json))
+				.catch(ex=>{
+					msg.respond({error:'Unable to obtain faucet balance'});
+					console.log(ex.toString());
+				});
+			}
+		})();
 	}
 
 	async initWallet() {
@@ -292,7 +370,9 @@ class KaspaPWA extends EventEmitter {
 				log.level = (this.options.verbose&&'verbose')||(this.options.debug&&'debug')||(this.options.log)||'info';
 
 				await this.initHttp();
-				//await this.initKaspa();
+				await this.initRPC();
+				await this.initKaspa();
+				await this.initMonitors();
 				//await this.initWallet();
 			})
 
