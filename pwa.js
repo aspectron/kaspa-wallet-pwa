@@ -190,7 +190,7 @@ class KaspaPWA extends EventEmitter {
 
 		let network = filter.shift() || 'kaspa';
 		let port = Wallet.networkTypes[network].port;
-		let host = this.options.rpc || `127.0.0.1:${port}`;
+		let host = this.options.grpc || `127.0.0.1:${port}`;
 
 
 //		this.rpc = { }
