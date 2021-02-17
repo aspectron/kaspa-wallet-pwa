@@ -94,7 +94,7 @@ class KaspaPWA extends EventEmitter {
 				},
 				grpc:{
 					protoPath:path.join(this.appFolder, "node_modules/@kaspa/grpc/proto/messages.proto"),
-					server:"localhost:16210",
+					server:this.grpc.host,
 					packageKey:"protowire"
 				}
 			}
@@ -182,55 +182,37 @@ class KaspaPWA extends EventEmitter {
 
 		const aliases = Object.keys(Wallet.networkAliases);
 		let filter = aliases.map((alias) => { return this.options[alias] ? Wallet.networkAliases[alias] : null; }).filter(v=>v);
-
-		this.rpc = { }
-		// this.wallets = { }
-		// this.addresses = { }
-		// this.limits = { }
-
-		if(this.options.rpc && filter.length != 1) {
-			log.error('You must explicitly use the network flag when specifying the RPC option');
+		if(this.options.grpc && filter.length != 1) {
+			log.error('You must explicitly use the network flag when specifying the gRPC option');
 			log.error('Option required: --mainnet, --testnet, --devnet, --simnet')
 			process.exit(1);
 		}
 
-		for (const {network,port} of Object.values(Wallet.networkTypes)) {
-			if(filter.length && !filter.includes(network)) {
-				log.verbose(`Skipping creation of '${network}'...`);
-				continue;
-			}
+		let network = filter.shift() || 'kaspa';
+		let port = Wallet.networkTypes[network].port;
+		let host = this.options.grpc || `127.0.0.1:${port}`;
 
-			const host = this.options.rpc || `127.0.0.1:${port}`;
-			log.info(`Creating gRPC binding for network '${network}' at ${host}`);
-			const rpc = this.rpc[network] = new RPC({ clientConfig:{ host } });
-			rpc.onError((error)=>{ log.error(`gRPC[${host}] ${error}`); })
 
-			// this.wallets[network] = Wallet.fromMnemonic(
-			// 	"about artefact spirit predict toast size earth slow soon allow evoke spell",
-			// 	// "wasp involve attitude matter power weekend two income nephew super way focus",
-			// 	{ network, rpc },
-			// 	{disableAddressDerivation:true}
-			// );
-			// this.wallets[network].setLogLevel(log.level);
+//		this.rpc = { }
+		log.info(`Creating gRPC binding for network '${network}' at ${host}`);
+		const kaspad = new RPC({ clientConfig:{ host } });
+		kaspad.onError((error)=>{ log.error(`gRPC[${host}] ${error}`); })
 
-			// log.info(`${Wallet.networkTypes[network].name} address - ${this.addresses[network]}`);
-		}
-
-		this.networks = Object.keys(this.rpc);
+		this.grpc = { network, port, host, kaspad }
 	}
 
 	async initMonitors() {
 		const medianOffset = 45*1000; // allow 45 sec behind median
 		const medianShift = Math.ceil(263*0.5*1000);
 
-		const poll = async (network) => {
+		const poll = async () => {
 			const ts_ = new Date();
 			const ts = ts_.getTime() - medianShift;
 			const data = { }
 
 			try {
-				const bdi = await  this.rpc[network].request('getBlockDagInfoRequest');
-				const vspbs = await  this.rpc[network].request('getVirtualSelectedParentBlueScoreRequest');
+				const bdi = await  this.grpc.kaspad.request('getBlockDagInfoRequest');
+				const vspbs = await  this.grpc.kaspad.request('getVirtualSelectedParentBlueScoreRequest');
 
 				const blueScore = parseInt(vspbs.blueScore);
 				const blockCount = parseInt(bdi.blockCount);
@@ -241,21 +223,17 @@ class KaspaPWA extends EventEmitter {
 				const pastMedianTimeDiff = Math.max(ts - pastMedianTime, 0);
 
 				this.flowHttp.sockets.publish('network-status', {
-					network, blueScore, blockCount, headerCount, difficulty, networkName, pastMedianTime, pastMedianTimeDiff
+					blueScore, blockCount, headerCount, difficulty, networkName, pastMedianTime, pastMedianTimeDiff
 				});
 			} catch(ex) {
 				console.log(ex.toString());
 			}
 
-			dpc(3500, ()=>{ poll(network); });
+			dpc(3500, ()=>{ poll(); });
 		}
 
 		this.monitors = { };
-		for(const network of this.networks) {
-			dpc(()=>{ poll(network); });
-		}
-
-
+		dpc(()=>{ poll(); });
 	}
 
 	async initRPC() {
@@ -269,7 +247,7 @@ class KaspaPWA extends EventEmitter {
 				const sompis = Decimal(amount).mul(1e8).toNumber();
 				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/get/${address}?ip=${querystring.escape(ip)}&amount=${querystring.escape(sompis)}`, { method: 'GET' })
 				.then(res => res.json()) 
-				.then(json => msg.respond(json))
+				.then(json => msg.respond({ip, ...json}))
 				.catch(ex=>{
 					msg.respond({error:'Unable to request funds from faucet'});
 					console.log(ex.toString());
@@ -283,7 +261,7 @@ class KaspaPWA extends EventEmitter {
 				const { address } = data;
 				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/available/${address}?ip=${querystring.escape(ip)}`, { method: 'GET' })
 				.then(res => res.json()) 
-				.then(json => msg.respond(json))
+				.then(json => msg.respond({ip, ...json}))
 				.catch(ex=>{
 					msg.respond({error:'Unable to obtain faucet balance'});
 					console.log(ex.toString());
@@ -353,7 +331,7 @@ class KaspaPWA extends EventEmitter {
 					throw new Error('Port number is out of range');
 				return port;
 			})
-            .option('--rpc <address>','use custom RPC address <host:port>')
+            .option('--grpc <address>','use custom gRPC address <host:port>')
 			;
 
 		program.command('run', { isDefault : true })
@@ -368,9 +346,9 @@ class KaspaPWA extends EventEmitter {
 
 				log.level = (this.options.verbose&&'verbose')||(this.options.debug&&'debug')||(this.options.log)||'info';
 
+				await this.initKaspa();
 				await this.initHttp();
 				await this.initRPC();
-				await this.initKaspa();
 				await this.initMonitors();
 				//await this.initWallet();
 			})
