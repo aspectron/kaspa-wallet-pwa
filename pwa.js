@@ -174,6 +174,7 @@ class KaspaPWA extends EventEmitter {
 		});
 
 		flowHttp.init();
+
 	}
 
 	async initKaspa() {
