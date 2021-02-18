@@ -1,4 +1,5 @@
 import {RPC} from '/@kaspa/grpc-web';
+console.log("PWA", window.PWA)
 //console.log("RPC", RPC)
 import '/style/style.js';
 import {dpc, camelCase, html, css, UID, FlowApp, FlowFormat, BaseElement } from '/flow/flow-ux/flow-ux.js';
