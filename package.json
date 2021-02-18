@@ -39,8 +39,8 @@
   "devDependencies": {
     "assert": "*",
     "crypto-browserify": "*",
-    "stream-browserify": "*",
     "process": "^0.11.10",
+    "stream-browserify": "*",
     "webpack": "^5.21.2",
     "webpack-cli": "^4.5.0"
   }
