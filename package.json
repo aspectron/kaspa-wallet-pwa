@@ -1,7 +1,8 @@
 {
   "name": "@kaspa/wallet-pwa",
-  "version": "0.0.9",
-  "description": "Kaspa Command Line Wallet Interface",
+  "version": "1.0.0",
+  "codename" : "The Rabbit",
+  "description": "Kaspa Wallet PWA",
   "main": "pwa.js",
   "scripts": {
     "prepare": "npx webpack"

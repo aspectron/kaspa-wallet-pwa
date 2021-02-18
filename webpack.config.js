@@ -2,8 +2,8 @@ const path = require('path');
 const root = __dirname;
 const webpack = require("webpack");
 const pkg = require("./package.json");
-const {version, name} = pkg;
-const PWA = {version, name};
+const {version, codename} = pkg;
+const PWA = {version, codename};
 //console.log("webpack.optimize.DedupePlugin", webpack)
 
 module.exports = {
