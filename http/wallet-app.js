@@ -13,7 +13,11 @@ class KaspaWalletHeader extends BaseElement{
 			.container{
 				display:flex;align-items:center;padding:5px;
 			}
-			.logo{height:30px;width:30px;background-color:#DDD}
+			.logo{
+				height:30px;width:30px;/*background-color:#DDD;*/
+				background:no-repeat url('/resources/images/kaspa.png') center;
+				background-size:contain;
+			}
 			.flex{flex:1}
 
 		`
