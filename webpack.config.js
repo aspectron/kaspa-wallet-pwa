@@ -1,6 +1,9 @@
 const path = require('path');
 const root = __dirname;
 const webpack = require("webpack");
+const pkg = require("./package.json");
+const {version, name} = pkg;
+const PWA = {version, name};
 //console.log("webpack.optimize.DedupePlugin", webpack)
 
 module.exports = {
@@ -66,6 +69,9 @@ module.exports = {
   },
   plugins:[
     //new webpack.optimize.DedupePlugin()
+    new webpack.DefinePlugin({
+      "window.PWA": JSON.stringify(PWA)
+    }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       process: 'process',
