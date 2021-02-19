@@ -42,6 +42,10 @@ class KaspaPWA extends EventEmitter {
 		this.ip_limit_map = new Map();
 		this.cache = { };
 
+		if(this.config.cf?.token) {
+			this.CF = require('cloudflare')({ token });
+		}
+
 		this.options = {
 			port : 3080
 		}
@@ -132,6 +136,7 @@ class KaspaPWA extends EventEmitter {
 			let indexHtml='';
 			const updateIndex = () => {
 				return new Promise((resolve) => {
+					this.purgeCache();
 					let ident = files.map(f=>JSON.parse(fs.readFileSync(f,'utf8')).version.replace(/\./g,'')).join('');
 					ident = crypto.createHash('sha256').update(ident).digest('hex').substring(0,16);
 					fs.readFile(indexFile,{encoding:'utf-8'}, (err, data)=>{
@@ -201,6 +206,8 @@ class KaspaPWA extends EventEmitter {
 		});
 
 		flowHttp.init();
+
+		this.purgeCache();
 
 	}
 
@@ -297,6 +304,19 @@ class KaspaPWA extends EventEmitter {
 			}
 		})();
 	}
+
+    purgeCache() {
+        if(!this.CF)
+			return;
+		if(!this.config.cf?.zone)
+			return;
+        CF.zones.purgeCache(this.config.cf.zone).then((data) => {
+			console.log(`Cloudflare cache purged`);
+          // console.log(`Callback:`, data);
+        }, (error) => {
+			console.log('Error purging cloudflare cache -',error);
+        });
+    }
 
 	async initWallet() {
 		// const { flowHttp } = this;
