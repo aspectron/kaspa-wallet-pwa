@@ -208,9 +208,6 @@ class KaspaPWA extends EventEmitter {
 		});
 
 		flowHttp.init();
-
-		this.purgeCache();
-
 	}
 
 	async initKaspa() {
@@ -310,12 +307,14 @@ class KaspaPWA extends EventEmitter {
     purgeCache() {
         if(!this.CF)
 			return;
-		const { zone } = this.config.cf;
-		if(!zone) {
-			log.error('CF - please configure cloudflare zone!');
+		const { zone, purge } = this.config.cf;
+		if(!zone || !purge) {
+			log.error(`CF - please configure cloudflare 'zone' and 'purge' settings!`);
 			return;
 		}
-        this.CF.zones.purgeCache(this.config.cf.zone).then((data) => {
+
+		log.warn('CF purging cache zone',this.config.cf.zone);
+        this.CF.zones.purgeCache(zone, purge).then((data) => {
 			log.warn(`Cloudflare cache purged`);
           // console.log(`Callback:`, data);
         }, (error) => {
