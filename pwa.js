@@ -315,11 +315,11 @@ class KaspaPWA extends EventEmitter {
 			log.error('CF - please configure cloudflare zone!');
 			return;
 		}
-        CF.zones.purgeCache(this.config.cf.zone).then((data) => {
-			console.log(`Cloudflare cache purged`);
+        this.CF.zones.purgeCache(this.config.cf.zone).then((data) => {
+			log.warn(`Cloudflare cache purged`);
           // console.log(`Callback:`, data);
         }, (error) => {
-			console.log('Error purging cloudflare cache -',error);
+			log.error('Error purging cloudflare cache -',error);
         });
     }
 
