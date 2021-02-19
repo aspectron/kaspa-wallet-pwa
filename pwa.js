@@ -138,13 +138,17 @@ class KaspaPWA extends EventEmitter {
 			const updateIndex = () => {
 				return new Promise((resolve) => {
 					this.purgeCache();
-					let ident = files.map(f=>JSON.parse(fs.readFileSync(f,'utf8')).version.replace(/\./g,'')).join('');
-					ident = crypto.createHash('sha256').update(ident).digest('hex').substring(0,16);
+					let list = files.map(f=>{ let {version,name} = JSON.parse(fs.readFileSync(f,'utf8')); return {version,name}; });
+					let hash = crypto.createHash('sha256').update(list.map(info=>info.version).join('')).digest('hex').substring(0,16);
+					
+					let script = `<script>window.PWA_MODULES={};${list.map(i=>`window.PWA_MODULES["${i.name}"] = "${i.version}";`).join(' ')}</script>`;
 					fs.readFile(indexFile,{encoding:'utf-8'}, (err, data)=>{
 						if(err)
 							return log.error(err);
-						indexHtml = data.replace("/dist/wallet-app.js",`/dist/wallet-app.js?v=${ident}`);
-						indexHtml = indexHtml.replace('ident:"kaspa:ident"', `ident:"${ident}"`)
+						indexHtml = data.replace(
+							`<script type="module" src="/dist/wallet-app.js"></script>`,
+							`\n${script}\n<script type="module" src="/dist/wallet-app.js?v=${hash}"></script>`);
+						indexHtml = indexHtml.replace('ident:"kaspa:ident"', `ident:"${hash}"`)
 						//console.log(indexHtml);
 						resolve();
 					})
@@ -304,7 +308,18 @@ class KaspaPWA extends EventEmitter {
 		})();
 	}
 
-    purgeCache() {
+	purgeCache() {
+        if(!this.CF)
+			return;
+		if(this._cf_purge)
+			clearTimeout(this._cf_purge);
+		this._cf_purge = setTimeout(()=>{
+			delete this._cf_purge;
+			this.purgeCache_();
+		}, 5000);
+	}
+
+    purgeCache_() {
         if(!this.CF)
 			return;
 		const { zone, purge } = this.config.cf;
