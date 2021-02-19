@@ -110,7 +110,6 @@ class KaspaPWA extends EventEmitter {
 			let {app} = args;
 			app.use(bodyParser.json())
 			app.use(bodyParser.urlencoded({ extended: true }))
-			
 
 			let rootFolder = this.appFolder;
 			let config = this.config||{};
@@ -121,7 +120,8 @@ class KaspaPWA extends EventEmitter {
 				walletWorker='/node_modules/@kaspa/wallet-worker',
 				secp256k1='/node_modules/secp256k1-wasm/http',
 				grpcWeb='/node_modules/@kaspa/grpc-web',
-				flowGRPCWeb='/node_modules/@aspectron/flow-grpc-web'
+				flowGRPCWeb='/node_modules/@aspectron/flow-grpc-web',
+				kaspaCoreLib='/node_modules/@kaspa/core-lib'
 			} = folders;
 
 			app.use([
@@ -132,7 +132,7 @@ class KaspaPWA extends EventEmitter {
 
 			// console.log("walletWorker", walletWorker);
 
-			const files = ['./',flowUX,kaspaUX,grpcWeb,'/node_modules/@kaspa/wallet','/node_modules/@kaspa/core-lib'].map(v=>path.join(__dirname,v,'package.json'));
+			const files = ['./',flowUX,kaspaUX,grpcWeb,'/node_modules/@kaspa/wallet', kaspaCoreLib].map(v=>path.join(__dirname,v,'package.json'));
 			const indexFile = path.join(__dirname,'http','index.html');
 			let indexHtml='';
 			const updateIndex = () => {
