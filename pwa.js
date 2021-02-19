@@ -132,7 +132,7 @@ class KaspaPWA extends EventEmitter {
 
 			console.log("walletWorker", walletWorker);
 
-			const files = ['./',flowUX,kaspaUX,grpcWeb].map(v=>path.join(__dirname,v,'package.json'));
+			const files = ['./',flowUX,kaspaUX,grpcWeb,'/node_modules/@kaspa/wallet','/node_modules/@kaspa/core-lib'].map(v=>path.join(__dirname,v,'package.json'));
 			const indexFile = path.join(__dirname,'http','index.html');
 			let indexHtml='';
 			const updateIndex = () => {
@@ -141,13 +141,13 @@ class KaspaPWA extends EventEmitter {
 					let list = files.map(f=>{ let {version,name} = JSON.parse(fs.readFileSync(f,'utf8')); return {version,name}; });
 					let hash = crypto.createHash('sha256').update(list.map(info=>info.version).join('')).digest('hex').substring(0,16);
 					
-					let script = `<script>window.PWA_MODULES={};${list.map(i=>`window.PWA_MODULES["${i.name}"] = "${i.version}";`).join(' ')}</script>`;
+					let script = `\n\t<script>\n\t\twindow.PWA_MODULES={};\n\t\t${list.map(i=>`window.PWA_MODULES["${i.name}"] = "${i.version}";`).join('\n\t\t')}\n\t</script>`;
 					fs.readFile(indexFile,{encoding:'utf-8'}, (err, data)=>{
 						if(err)
 							return log.error(err);
 						indexHtml = data.replace(
 							`<script type="module" src="/dist/wallet-app.js"></script>`,
-							`\n${script}\n<script type="module" src="/dist/wallet-app.js?v=${hash}"></script>`);
+							`\n${script}\n\t<script type="module" src="/dist/wallet-app.js?v=${hash}"></script>`);
 						indexHtml = indexHtml.replace('ident:"kaspa:ident"', `ident:"${hash}"`)
 						//console.log(indexHtml);
 						resolve();
