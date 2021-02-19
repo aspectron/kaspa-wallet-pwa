@@ -43,6 +43,7 @@ class KaspaPWA extends EventEmitter {
 		this.cache = { };
 
 		if(this.config.cf?.token) {
+			const { token } = this.config.cf;
 			this.CF = require('cloudflare')({ token });
 		}
 
@@ -309,8 +310,11 @@ class KaspaPWA extends EventEmitter {
     purgeCache() {
         if(!this.CF)
 			return;
-		if(!this.config.cf?.zone)
+		const { zone } = this.config.cf;
+		if(!zone) {
+			log.error('CF - please configure cloudflare zone!');
 			return;
+		}
         CF.zones.purgeCache(this.config.cf.zone).then((data) => {
 			console.log(`Cloudflare cache purged`);
           // console.log(`Callback:`, data);
@@ -318,40 +322,6 @@ class KaspaPWA extends EventEmitter {
 			console.log('Error purging cloudflare cache -',error);
         });
     }
-
-	async initWallet() {
-		// const { flowHttp } = this;
-		// let socketConnections = flowHttp.sockets.events.subscribe('connect');
-		// (async()=>{
-		// 	for await(const event of socketConnections) {
-		// 		const { networks, addresses, limits } = this;
-		// 		const { socket, ip } = event;
-		// 		socket.publish('networks', { networks });
-		// 		socket.publish('addresses', { addresses });
-		// 		networks.forEach(network=>{
-		// 			let wallet = this.wallets[network];
-
-		// 			if(!wallet)
-		// 				return;
-		// 			const { balance } = wallet;
-		// 			//setTimeout(()=>{
-		// 				socket.publish(`balance`, { network, balance });
-		// 				//console.log("wallet balance",  balance)
-		// 			//}, 50);
-		// 			this.publishLimit({ network, socket, ip });
-
-		// 			let cache = this.cache[network];
-		// 			if(cache && cache.length) {
-		// 				cache.forEach((msg) => {
-		// 					socket.publish(`utxo-change`, msg);
-		// 				})
-		// 			}
-
-		// 		});
-		// 	}
-		// })();
-
-	}
 
 	async main() {
 		const logLevels = ['error','warn','info','verbose','debug'];
