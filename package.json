@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@aspectron/flow-grpc-web": "*",
-    "@aspectron/flow-http": ">=0.2.11",
+    "@aspectron/flow-http": ">=0.2.12",
     "@aspectron/flow-router": "*",
     "@aspectron/flow-utils": "*",
     "@aspectron/flow-ux": ">=0.1.32",
