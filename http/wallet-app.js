@@ -27,7 +27,7 @@ class KaspaWalletHeader extends BaseElement{
 			<div class="container">
 				<div class="logo"></div>
 				<div class="flex"></div>
-				<a class="link">About us</a>
+				<!--a class="link">About us</a-->
 			</div>
 		`
 	}
