@@ -101,7 +101,7 @@ class KaspaPWA extends EventEmitter {
 		});
 		// this.flowHttp = flowHttp;
 
-		flowHttp.on("app.init", args=>{
+		flowHttp.on("app.init", async (args)=>{
 			let {app} = args;
 			app.use(bodyParser.json())
 			app.use(bodyParser.urlencoded({ extended: true }))
@@ -125,7 +125,31 @@ class KaspaPWA extends EventEmitter {
 				res.redirect("/")
 			})
 
-			console.log("walletWorker", walletWorker)
+			console.log("walletWorker", walletWorker);
+
+			const files = ['./',flowUX,kaspaUX,grpcWeb].map(v=>path.join(__dirname,v,'package.json'));
+			const indexFile = path.join(__dirname,'http','index.html');
+			let indexHtml='';
+			const updateIndex = () => {
+				return new Promise((resolve) => {
+					let ident = files.map(f=>JSON.parse(fs.readFileSync(f,'utf8')).version.replace(/\./g,'')).join('');
+					ident = crypto.createHash('sha256').update(ident).digest('hex').substring(0,16);
+					fs.readFile(indexFile,{encoding:'utf-8'}, (err, data)=>{
+						if(err)
+							return log.error(err);
+						indexHtml = data.replace("/dist/wallet-app.js",`/dist/wallet-app.js?v=${ident}`);
+						//console.log(indexHtml);
+						resolve();
+					})
+				});
+			}
+			await updateIndex();
+			files.forEach(f=>fs.watch(f,updateIndex));
+			fs.watch(indexFile,updateIndex);
+			app.get(['/','/index.html'], (req,res) => {
+				res.send(indexHtml);
+			})
+
 			//kaspa-wallet-worker/worker.js
 			app.use('/resources', express.static( path.join(kaspaUX, "resources"), {
 				index: 'false'
