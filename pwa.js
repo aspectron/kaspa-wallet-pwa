@@ -138,6 +138,7 @@ class KaspaPWA extends EventEmitter {
 						if(err)
 							return log.error(err);
 						indexHtml = data.replace("/dist/wallet-app.js",`/dist/wallet-app.js?v=${ident}`);
+						indexHtml = indexHtml.replace('ident:"kaspa:ident"', `ident:"${ident}"`)
 						//console.log(indexHtml);
 						resolve();
 					})
