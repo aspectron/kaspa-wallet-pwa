@@ -89,7 +89,7 @@ class KaspaPWA extends EventEmitter {
 					ssl : false
 				}, this.config?.http||{}),
 				staticFiles:{
-					'/':'http',
+					//'/':'http',
 					'/dist':'dist'
 				},
 				grpc:{
@@ -152,6 +152,9 @@ class KaspaPWA extends EventEmitter {
 
 			//kaspa-wallet-worker/worker.js
 			app.use('/resources', express.static( path.join(kaspaUX, "resources"), {
+				index: 'false'
+			}))
+			app.use('/', express.static( path.join(rootFolder, "http"), {
 				index: 'false'
 			}))
 			app.get('/kaspa-wallet-worker/worker.js', (req, res)=>{
