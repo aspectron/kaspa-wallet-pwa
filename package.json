@@ -1,6 +1,6 @@
 {
   "name": "@kaspa/wallet-pwa",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "codename": "The Rabbit",
   "description": "Kaspa Wallet PWA",
   "main": "pwa.js",
