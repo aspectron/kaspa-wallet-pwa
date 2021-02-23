@@ -132,7 +132,7 @@ class KaspaPWA extends EventEmitter {
 
 			// console.log("walletWorker", walletWorker);
 
-			const files = ['./',flowUX,kaspaUX,grpcWeb,'/node_modules/@kaspa/wallet', kaspaCoreLib].map(v=>path.join(__dirname,v,'package.json'));
+			const files = ['./',flowUX,kaspaUX,grpcWeb,'/node_modules/@kaspa/wallet','/node_modules/@kaspa/grpc', kaspaCoreLib].map(v=>path.join(__dirname,v,'package.json'));
 			const indexFile = path.join(__dirname,'http','index.html');
 			let indexHtml='';
 			const updateIndex = () => {
