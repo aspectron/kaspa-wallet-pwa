@@ -172,6 +172,9 @@ class KaspaPWA extends EventEmitter {
 			app.use('/', express.static( path.join(rootFolder, "http"), {
 				index: 'false'
 			}))
+			app.use('/', express.static( path.join(rootFolder, "dist"), {
+				index: 'false'
+			}))
 			app.get('/kaspa-wallet-worker/worker.js', (req, res)=>{
 				res.sendFile(path.join(rootFolder, 'dist/kaspa-wallet-worker-core.js'))
 			})

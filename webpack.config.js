@@ -2,6 +2,7 @@ const path = require('path');
 const root = __dirname;
 const webpack = require("webpack");
 const pkg = require("./package.json");
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const {version, codename} = pkg;
 const PWA = {version, codename};
 //console.log("webpack.optimize.DedupePlugin", webpack)
@@ -75,6 +76,18 @@ module.exports = {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
       process: 'process',
+    }),
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      clientsClaim: true,
+      skipWaiting: true,
+      runtimeCaching: [
+        {
+          urlPattern: /.*/,
+          handler: 'NetworkFirst'
+        }
+      ]
     })
   ],
   stats:{

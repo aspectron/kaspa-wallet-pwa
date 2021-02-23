@@ -7,7 +7,7 @@
 	
 	<!-- --------------------------------------------------------- -->
 
-	<link rel="manifest" href="manifest.json">
+	<link rel="manifest" href="/manifest.json">
 	<meta name="description" content="Kaspa Wallet">
 	<meta name="keywords" content="kaspa kaspanet wallet crypto currency kaspanet dag">
 
@@ -61,6 +61,25 @@
 			baseUrl:"/kaspa-ux",
 			ident:"kaspa:ident"
 		}
+		if ('serviceWorker' in navigator) {
+			/*
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register('/service-worker.js').then(registration => {
+					console.log('SW registered: ', registration);
+				}).catch(registrationError => {
+					console.log('SW registration failed: ', registrationError);
+				});
+			});
+			*/
+
+			navigator.serviceWorker.getRegistrations()
+			.then( function(registrations) {
+				for(let registration of registrations) {
+					registration.unregister();
+				}
+			}); 
+		}
+
 	</script>
 	<script src="/webcomponentsjs/webcomponents-loader.js"></script>
 	<script type="module" src="/dist/wallet-app.js"></script>
