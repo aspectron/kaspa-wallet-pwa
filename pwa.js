@@ -238,12 +238,22 @@ class KaspaPWA extends EventEmitter {
 		let host = this.options.grpc || `127.0.0.1:${port}`;
 
 
-//		this.rpc = { }
+		//this.rpc = { }
 		log.info(`Creating gRPC binding for network '${network}' at ${host}`);
 		const kaspad = new RPC({ clientConfig:{ host } });
 		kaspad.onError((error)=>{ log.error(`gRPC[${host}] ${error}`); })
+		kaspad.onConnect(async()=>{
+			let {error} = await kaspad.getUtxosByAddresses([])
+			.catch((err)=>{
+				//error = err;
+			})
 
-		this.grpc = { network, port, host, kaspad }
+			this.grpc.flags.utxoIndex = !error?.message?.includes('--utxoindex');
+			this.emit("grpc.flags", this.grpc.flags)
+			log.info("grpc.flags:", this.grpc.flags, 'getUtxosByAddresses:test-error:',error)
+		})
+
+		this.grpc = { network, port, host, kaspad, flags:{} }
 	}
 
 	async initMonitors() {
