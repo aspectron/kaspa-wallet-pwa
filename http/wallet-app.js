@@ -138,7 +138,7 @@ class KaspaWalletApp extends FlowApp {
 		let meta = {"generator":"pwa"}
 
 		return html`
-		${isMobile?'':html`<kaspa-wallet-header></kaspa-wallet-header>`}
+		${isMobile?'':html`<!--kaspa-wallet-header></kaspa-wallet-header-->`}
 		<kaspa-wallet .walletMeta='${meta}'></kaspa-wallet>
 		`
 	}
