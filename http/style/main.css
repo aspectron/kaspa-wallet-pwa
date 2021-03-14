@@ -1,5 +1,6 @@
 body{
 	--kaspa-wallet-top-menu-top:10px;
+	--kaspa-wallet-right-area-height:calc(100vh - 80px);
 }
 kaspa-wallet-app{
 	flex:1;overflow:hidden;position:fixed;
