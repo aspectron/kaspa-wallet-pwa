@@ -299,8 +299,7 @@ class KaspaPWA extends EventEmitter {
 			for await(const msg of availableRequests) {
 				const { data, ip } = msg;
 				const { address, amount } = data;
-				const sompis = Decimal(amount).mul(1e8).toNumber();
-				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/get/${address}?ip=${querystring.escape(ip)}&amount=${querystring.escape(sompis)}`, { method: 'GET' })
+				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/get/${address}?ip=${querystring.escape(ip)}&amount=${querystring.escape(amount)}`, { method: 'GET' })
 				.then(res => res.json()) 
 				.then(json => msg.respond({ip, ...json}))
 				.catch(ex=>{
