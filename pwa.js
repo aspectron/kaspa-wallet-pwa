@@ -293,11 +293,14 @@ class KaspaPWA extends EventEmitter {
 
 	async initRPC() {
 		const { flowHttp } = this;
+		let k = ()=> (Math.random()*100).toFixed(0);
+		let randomIP = `${k()}.${k()}.${k()}.${k()}`
 		const faucetUrl = 'https://faucet.kaspanet.io';
-		let availableRequests = flowHttp.sockets.subscribe("faucet-request");
+		let getRequests = flowHttp.sockets.subscribe("faucet-request");
 		(async ()=>{
-			for await(const msg of availableRequests) {
-				const { data, ip } = msg;
+			for await(const msg of getRequests) {
+				let { data, ip } = msg;
+				//ip = randomIP;
 				const { address, amount } = data;
 				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/get/${address}?ip=${querystring.escape(ip)}&amount=${querystring.escape(amount)}`, { method: 'GET' })
 				.then(res => res.json()) 
@@ -308,11 +311,12 @@ class KaspaPWA extends EventEmitter {
 				});
 			}
 		})();
-		let getRequests = flowHttp.sockets.subscribe("faucet-available");
+		let availableRequests = flowHttp.sockets.subscribe("faucet-available");
 		(async ()=>{
-			for await(const msg of getRequests) {
-				const { data, ip } = msg;
+			for await(const msg of availableRequests) {
+				let { data, ip } = msg;
 				const { address } = data;
+				//ip = randomIP;
 				fetch(`${faucetUrl}/api/${this.config.faucet_apikey}/available/${address}?ip=${querystring.escape(ip)}`, { method: 'GET' })
 				.then(res => res.json()) 
 				.then(json => msg.respond({ip, ...json}))
