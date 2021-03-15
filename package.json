@@ -1,7 +1,7 @@
 {
   "name": "@kaspa/wallet-pwa",
-  "version": "1.0.13",
-  "codename": "The Rabbit",
+  "version": "1.0.14",
+  "codename": "",
   "description": "Kaspa Wallet PWA",
   "main": "pwa.js",
   "scripts": {
@@ -19,8 +19,8 @@
     "@kaspa/grpc-node": ">=1.0.2",
     "@kaspa/grpc-web": ">=1.0.0",
     "@kaspa/ux": "file:../kaspa-ux",
-    "@kaspa/wallet": ">=1.0.10",
-    "@kaspa/wallet-worker": ">=1.0.6",
+    "@kaspa/wallet": ">=1.0.11",
+    "@kaspa/wallet-worker": ">=1.0.8",
     "@webcomponents/webcomponentsjs": "*",
     "buffer": "^6.0.3",
     "cloudflare": "^2.7.0",
