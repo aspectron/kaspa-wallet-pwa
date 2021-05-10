@@ -100,7 +100,10 @@ class KaspaPWA extends EventEmitter {
 				grpc:{
 					protoPath:path.join(this.appFolder, "node_modules/@kaspa/grpc/proto/messages.proto"),
 					server:this.grpc.host,
-					packageKey:"protowire"
+					packageKey:"protowire",
+					options : {
+						"grpc.max_receive_message_length": -1
+					}
 				}
 			}
 		});
