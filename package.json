@@ -1,6 +1,6 @@
 {
   "name": "@kaspa/wallet-pwa",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "codename": "",
   "description": "Kaspa Wallet PWA",
   "main": "pwa.js",
@@ -22,6 +22,7 @@
     "@kaspa/wallet": ">=1.4.4",
     "@kaspa/wallet-worker": ">=1.1.4",
     "@webcomponents/webcomponentsjs": "*",
+    "browserify": "^17.0.0",
     "buffer": "^6.0.3",
     "cloudflare": "^2.7.0",
     "colors": "*",
@@ -31,6 +32,7 @@
     "decimal.js": "^10.2.1",
     "express": "4.17.1",
     "express-session": "1.17.1",
+    "gulp": "^4.0.2",
     "lit-element": "*",
     "node-fetch": "^2.6.1",
     "sockjs": "*",
@@ -39,12 +41,12 @@
     "ws": "^7.4.2"
   },
   "devDependencies": {
-    "assert": "*",
+    "assert": "^2.0.0",
     "crypto-browserify": "*",
     "process": "^0.11.10",
     "stream-browserify": "*",
-    "webpack": "^5.21.2",
-    "webpack-cli": "^4.5.0",
-    "workbox-webpack-plugin": "^6.1.0"
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0",
+    "workbox-webpack-plugin": "^6.1.5"
   }
 }
