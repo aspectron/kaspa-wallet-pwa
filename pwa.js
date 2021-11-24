@@ -246,14 +246,16 @@ class KaspaPWA extends EventEmitter {
 		const kaspad = new RPC({ clientConfig:{ host } });
 		kaspad.onError((error)=>{ log.error(`gRPC[${host}] ${error}`); })
 		kaspad.onConnect(async()=>{
-			let {error} = await kaspad.getUtxosByAddresses([])
+			let res = await kaspad.getUtxosByAddresses([])
 			.catch((err)=>{
 				//error = err;
 			})
 
+			let {error} = res;
+
 			this.grpc.flags.utxoIndex = !error?.message?.includes('--utxoindex');
 			this.emit("grpc.flags", this.grpc.flags)
-			log.info("grpc.flags:", this.grpc.flags, 'getUtxosByAddresses:test-error:',error)
+			log.info("grpc.flags:", this.grpc.flags, 'getUtxosByAddresses:test:', res)
 		})
 
 		this.grpc = { network, port, host, kaspad, flags:{} }
