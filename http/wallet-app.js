@@ -49,7 +49,7 @@ class KaspaWalletApp extends FlowApp {
 		super();
 
 		this.networks = ['kaspa','kaspatest','kaspadev','kaspasim'];
-		this.network = "kaspatest";
+		this.network = "kaspa";
 		this.addresses = {};
 		this.available = {};
 		this.limits = {};
@@ -125,9 +125,9 @@ class KaspaWalletApp extends FlowApp {
 	}
 
 	offlineCallback() {
-		this.networkUpdates.stop();
-		this.addressUpdates.stop();
-		this.limitUpdates.stop();
+		this.networkUpdates?.stop();
+		this.addressUpdates?.stop();
+		this.limitUpdates?.stop();
 	}
 
 	render(){
