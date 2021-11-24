@@ -125,9 +125,9 @@ class KaspaWalletApp extends FlowApp {
 	}
 
 	offlineCallback() {
-		this.networkUpdates?.stop();
-		this.addressUpdates?.stop();
-		this.limitUpdates?.stop();
+		this.networkUpdates?.close();
+		this.addressUpdates?.close();
+		this.limitUpdates?.close();
 	}
 
 	render(){
@@ -157,7 +157,7 @@ class KaspaWalletApp extends FlowApp {
 		this.wallet.setRPCBuilder(()=>{
 			return {
 				rpc: new RPC({verbose, clientConfig:{path:"/rpc"}}),
-				network: "kaspatest"
+				network: this.network
 			}
 		});
 	}
