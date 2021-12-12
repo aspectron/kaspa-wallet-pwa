@@ -379,6 +379,7 @@ class KaspaPWA extends EventEmitter {
 			.option('--testnet','use testnet network')
 			.option('--devnet','use devnet network')
 			.option('--simnet','use simnet network')
+			.option('--mainnet','use kaspa/mainnet network')
 			//.option('--no-ssl','disable SSL')
 			.option('--host <host>','http host (default: localhost)', 'localhost')
 			.option('--port <port>',`set http port (default ${this.options.port})`, (port)=>{

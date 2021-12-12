@@ -14,8 +14,8 @@ module.exports = {
     'wallet-app': './http/wallet-app.js',
     'kaspa-wallet-worker-core': './http/kaspa-wallet-worker-core.js'
   },
-  //mode: "production",
-  mode: "development",
+  mode: "production",
+  //mode: "development",
   watch: false,
   /*externals_:{
     "/style/style___.js": "/style/style.js",
