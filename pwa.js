@@ -103,7 +103,8 @@ class KaspaPWA extends EventEmitter {
 					packageKey:"protowire",
 					options : {
 						"grpc.max_receive_message_length": -1
-					}
+					},
+					clientWaitTime:3000
 				}
 			}
 		});
