@@ -266,6 +266,8 @@ class KaspaPWA extends EventEmitter {
 		const medianShift = Math.ceil(263*0.5*1000);
 
 		const poll = async () => {
+			if(!this.grpc.kaspad.client.isConnected)
+				return dpc(3500, ()=>{ poll(); });
 			const ts_ = new Date();
 			const ts = ts_.getTime() - medianShift;
 			const data = { }
