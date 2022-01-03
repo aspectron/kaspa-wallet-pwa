@@ -1,6 +1,6 @@
 {
   "name": "@kaspa/wallet-pwa",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "codename": "",
   "description": "Kaspa Wallet PWA",
   "main": "pwa.js",
@@ -10,7 +10,7 @@
   "author": "ASPECTRON Inc.",
   "license": "ISC",
   "dependencies": {
-    "@aspectron/flow-grpc-web": "*",
+    "@aspectron/flow-grpc-web": ">=0.0.7",
     "@aspectron/flow-http": ">=0.2.18",
     "@aspectron/flow-router": "*",
     "@aspectron/flow-utils": "*",
@@ -19,8 +19,8 @@
     "@kaspa/grpc-node": ">=1.0.7",
     "@kaspa/grpc-web": ">=1.0.1",
     "@kaspa/ux": "file:../kaspa-ux",
-    "@kaspa/wallet": ">=1.4.9",
-    "@kaspa/wallet-worker": ">=1.1.7",
+    "@kaspa/wallet": ">=1.4.10",
+    "@kaspa/wallet-worker": ">=1.1.8",
     "@webcomponents/webcomponentsjs": "*",
     "browserify": "^17.0.0",
     "buffer": "^6.0.3",
