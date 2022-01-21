@@ -135,15 +135,24 @@ class KaspaPWA extends EventEmitter {
 			})
 
 			// console.log("walletWorker", walletWorker);
+			const files = [
+				'./',
+				flowUX,kaspaUX,grpcWeb,
+				'/node_modules/@kaspa/wallet',
+				'/node_modules/@kaspa/grpc',
+				kaspaCoreLib
+			].map(v=>path.join(__dirname,v,'package.json'));
 
-			const files = ['./',flowUX,kaspaUX,grpcWeb,'/node_modules/@kaspa/wallet','/node_modules/@kaspa/grpc', kaspaCoreLib].map(v=>path.join(__dirname,v,'package.json'));
 			const indexFile = path.join(__dirname,'http','index.html');
 			let indexHtml='';
 			const updateIndex = () => {
 				return new Promise((resolve) => {
 					this.purgeCache();
 					try {
-						let list = files.map(f=>{ let {version,name} = JSON.parse(fs.readFileSync(f,'utf8')); return {version,name}; });
+						let list = files.map(f=>{
+							let {version,name} = JSON.parse(fs.readFileSync(f,'utf8'));
+							return {version,name};
+						});
 						let hash = crypto.createHash('sha256').update(list.map(info=>info.version).join('')).digest('hex').substring(0,16);
 						
 						let script = `\n\t<script>\n\t\twindow.PWA_MODULES={};\n\t\t${list.map(i=>`window.PWA_MODULES["${i.name}"] = "${i.version}";`).join('\n\t\t')}\n\t</script>`;

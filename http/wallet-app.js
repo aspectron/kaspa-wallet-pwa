@@ -152,7 +152,7 @@ class KaspaWalletApp extends FlowApp {
 		super.firstUpdated();
 		console.log("app: firstUpdated")
 		this.wallet = this.renderRoot.querySelector("kaspa-wallet");
-		console.log("this.wallet", this.wallet)
+		//console.log("this.wallet", this.wallet)
 		let verbose = localStorage.rpcverbose == 1;
 		this.wallet.setRPCBuilder(()=>{
 			return {
