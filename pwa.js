@@ -308,11 +308,66 @@ class KaspaPWA extends EventEmitter {
 		dpc(()=>{ poll(); });
 	}
 
+	/**
+	* @return {String} path i18n entries file
+	*/
+	getI18nFilePath(name){
+		return path.join(this.appFolder, name);
+	}
+
+	/**
+	* @return {Array} i18n entries
+	*/
+	getI18nEntries(){
+		let localEntries = this._getI18nEntries('i18n.entries');
+		let dataEntries = this._getI18nEntries('i18n.data');
+		if(!dataEntries.length)
+			return localEntries;
+		let localEntriesMap = this.createI18nEntriesMap(localEntries);
+		let dataEntriesMap = this.createI18nEntriesMap(dataEntries);
+		return Object.values(Object.assign(localEntriesMap, dataEntriesMap))
+	}
+	createI18nEntriesMap(entries){
+		let map = {}
+		entries.forEach(e=>{
+			if(!e.en)
+				return
+			map[e.en] = e;
+		});
+
+		return map;
+	}
+	_getI18nEntries(fileName){
+		let dataFile = this.getI18nFilePath(fileName);
+		if(!fs.existsSync(dataFile))
+			return [];
+
+		let data = (fs.readFileSync(dataFile)+"").trim();
+		if(!data.length)
+			return [];
+		try{
+			data = JSON.parse(data);
+		}catch(e){
+			return [];
+		}
+
+		return data || [];
+	}
+
 	async initRPC() {
 		const { flowHttp } = this;
 		let k = ()=> (Math.random()*100).toFixed(0);
 		let randomIP = `${k()}.${k()}.${k()}.${k()}`
 		const faucetUrl = 'https://faucet.kaspanet.io';
+		
+		let i18nEntries = this.getI18nEntries();
+		let i18nRequests = flowHttp.sockets.subscribe("get-app-i18n-entries");
+		(async ()=>{
+			for await(const msg of i18nRequests) {
+				msg.respond({entries: i18nEntries})
+			}
+		})();
+
 		let getRequests = flowHttp.sockets.subscribe("faucet-request");
 		(async ()=>{
 			for await(const msg of getRequests) {
