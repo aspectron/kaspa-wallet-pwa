@@ -6,7 +6,10 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const {version, codename} = pkg;
 const PWA = {version, codename};
 //console.log("webpack.optimize.DedupePlugin", webpack)
-
+let mode = "production";
+let watch = false;
+//mode = "development"; watch=true;
+console.log("MODE:", mode)
 module.exports = {
   entry: {
     //'kaspa-wallet-worker': './http/kaspa-wallet-worker.js',
@@ -14,9 +17,8 @@ module.exports = {
     'wallet-app': './http/wallet-app.js',
     'kaspa-wallet-worker-core': './http/kaspa-wallet-worker-core.js'
   },
-  mode: "production",
-  //mode: "development",
-  watch: false,
+  mode,
+  watch,
   /*externals_:{
     "/style/style___.js": "/style/style.js",
     "/flow/flow-ux/flow-ux.js": "/flow/flow-ux/flow-ux.js",
@@ -31,6 +33,7 @@ module.exports = {
       "/flow/flow-ux/src/flow-format.js": path.join(root, "node_modules/@aspectron/flow-ux/src/flow-format.js"),
       "/flow/flow-ux/src/base-element.js": path.join(root, "node_modules/@aspectron/flow-ux/src/base-element.js"),
       "/flow/flow-ux/src/flow-swipeable.js": path.join(root, "node_modules/@aspectron/flow-ux/src/flow-swipeable.js"),
+      "/flow/flow-ux/src/flow-i18n.js": path.join(root, "node_modules/@aspectron/flow-ux/src/flow-i18n.js"),
       "/@kaspa/ux/kaspa-ux.js": path.join(root, "node_modules/@kaspa/ux/kaspa-ux.js"),
       "/@kaspa/grpc-web": path.join(root, "./node_modules/@kaspa/grpc-web"),
       "@aspectron/flow-grpc-web": path.join(root, "./node_modules/@aspectron/flow-grpc-web"),

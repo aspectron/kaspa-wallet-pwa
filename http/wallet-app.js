@@ -1,10 +1,14 @@
 import {RPC} from '/@kaspa/grpc-web';
-console.log("PWA", window.PWA)
+//console.log("PWA", window.PWA)
 //console.log("RPC", RPC)
 import '/style/style.js';
-import {dpc, camelCase, html, css, UID, FlowApp, FlowFormat, BaseElement } from '/flow/flow-ux/flow-ux.js';
+import {
+	dpc, html, css, FlowApp, BaseElement, i18n
+} from '/flow/flow-ux/flow-ux.js';
 import {isMobile} from '/@kaspa/ux/kaspa-ux.js';
 export * from '/@kaspa/ux/kaspa-ux.js';
+
+window.__testI18n = (test)=>i18n.setTesting(!!test);
 
 class KaspaWalletHeader extends BaseElement{
 	static get styles(){
@@ -84,6 +88,19 @@ class KaspaWalletApp extends FlowApp {
 
 	async initUI(){
 		this.bodyEl = document.body;
+		await this.initI18n();
+	}
+
+	async initI18n(){
+		i18n.setActiveLanguages(['en', 'ja', 'zh_HANS']);
+		//i18n.setTesting(true);
+		const { rpc } = flow.app;
+		let {entries} = await rpc.request("get-app-i18n-entries")
+		.catch((err)=>{
+			console.log("get-app-i18n-entries:error", err)
+		})
+		if(entries)
+			i18n.setEntries(entries);
 	}
 
 	onlineCallback() {
@@ -152,7 +169,7 @@ class KaspaWalletApp extends FlowApp {
 		super.firstUpdated();
 		console.log("app: firstUpdated")
 		this.wallet = this.renderRoot.querySelector("kaspa-wallet");
-		console.log("this.wallet", this.wallet)
+		//console.log("this.wallet", this.wallet)
 		let verbose = localStorage.rpcverbose == 1;
 		this.wallet.setRPCBuilder(()=>{
 			return {
