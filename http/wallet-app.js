@@ -92,7 +92,7 @@ class KaspaWalletApp extends FlowApp {
 	}
 
 	async initI18n(){
-		i18n.setActiveLanguages(['en', 'ja', 'zh_HANS']);
+		i18n.setActiveLanguages(['en', 'ja', 'zh_HANS', 'ko']);
 		//i18n.setTesting(true);
 		const { rpc } = flow.app;
 		let {entries} = await rpc.request("get-app-i18n-entries")
