@@ -5,3 +5,4 @@ bin/*
 dist
 __wallet.txt
 certificates
+.script-hash
