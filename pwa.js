@@ -154,7 +154,7 @@ class KaspaPWA extends EventEmitter {
 							return {version,name};
 						});
 						let hash = crypto.createHash('sha256').update(list.map(info=>info.version).join('')).digest('hex').substring(0,16);
-						
+						fs.writeFileSync(".script-hash", hash);
 						let script = `\n\t<script>\n\t\twindow.PWA_MODULES={};\n\t\t${list.map(i=>`window.PWA_MODULES["${i.name}"] = "${i.version}";`).join('\n\t\t')}\n\t</script>`;
 						fs.readFile(indexFile,{encoding:'utf-8'}, (err, data)=>{
 							if(err)
