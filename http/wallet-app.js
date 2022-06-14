@@ -177,26 +177,6 @@ class KaspaWalletApp extends FlowApp {
 				network: this.network
 			}
 		});
-
-		/*
-		console.log("RPC:", RPC)
-		let x = Date.now();
-		let connection = 0;
-		for (let i in (new Array(200)).fill("")){
-			//console.log("i###::::::", i)
-			let c = new RPC({verbose:true, clientConfig:{path:"/rpc"}});
-			c.setStreamUid(`${x}-${i}`)
-			c.onConnect(async ()=>{
-				//console.log("RPC-ON-CONNECT")
-				console.log("connection####", ++connection)
-				let a = await c.getVirtualSelectedParentBlueScore();
-				console.log("getVirtualSelectedParentBlueScore:", a);
-			});
-			c.onDisconnect(()=>{
-				console.log("connection####", --connection)
-			})
-		}
-		*/
 	}
 
 }
