@@ -368,6 +368,13 @@ class KaspaPWA extends EventEmitter {
 			}
 		})();
 
+		let networkRequests = flowHttp.sockets.subscribe("get-network");
+		(async ()=>{
+			for await(const msg of networkRequests) {
+				msg.respond({network:this.grpc.network})
+			}
+		})();
+
 		let getRequests = flowHttp.sockets.subscribe("faucet-request");
 		(async ()=>{
 			for await(const msg of getRequests) {

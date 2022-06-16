@@ -88,7 +88,20 @@ class KaspaWalletApp extends FlowApp {
 
 	async initUI(){
 		this.bodyEl = document.body;
+		await this.getNetwork();
 		await this.initI18n();
+	}
+
+	async getNetwork(){
+		const { rpc } = flow.app;
+		let {network} = await rpc.request("get-network")
+		.catch((err)=>{
+			console.log("get-network:error", err)
+		});
+
+		if(network && this.network != network){
+			this.network = network;
+		}
 	}
 
 	async initI18n(){
