@@ -20,6 +20,7 @@ const protoLoader = require('@grpc/proto-loader');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 const Decimal = require('decimal.js');
+//const child_process = require("node:child_process");
 
 const {FlowHttp} = require('@aspectron/flow-http')({
 	express,
@@ -448,6 +449,7 @@ class KaspaPWA extends EventEmitter {
 					throw new Error(`Log level must be one of: ${logLevels.join(', ')}`);
 				return level;
 			})
+			.option('--restart-after <seconds>','auto kill after', false)
 			.option('--verbose','log wallet activity')
 			.option('--debug','debug wallet activity')
 			.option('--testnet','use testnet network')
@@ -484,6 +486,19 @@ class KaspaPWA extends EventEmitter {
 				await this.initRPC();
 				await this.initMonitors();
 				//await this.initWallet();
+				if(this.options.restartAfter){
+					let seconds = parseInt(this.options.restartAfter, 0);
+					console.log(`restarting in ${seconds} seconds....`)
+
+					setTimeout(async ()=>{
+						console.log("::::RESTART::::")
+						process.exit(0);
+						//kaspaPWA.flowHttp.server.close(()=>{
+						//	process.exit("RESTART");
+						//});
+					}, seconds * 1000)
+				}
+				
 			})
 
 		program.parse();
@@ -506,3 +521,13 @@ class KaspaPWA extends EventEmitter {
 		console.log(ex.toString());
 	}
 })();
+
+
+/*
+process.on('exit', (code) => {
+	if(code != 'RESTART')
+		return
+	//console.log("exit-code:"+code)
+	child_process.execSync("node pwa");
+})
+*/
