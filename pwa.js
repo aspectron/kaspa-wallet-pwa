@@ -21,6 +21,23 @@ const fetch = require('node-fetch');
 const querystring = require('querystring');
 const Decimal = require('decimal.js');
 //const child_process = require("node:child_process");
+let lastTs = Date.now()/1000;
+let timeDiffDumpCount = 0;
+
+setInterval(()=>{
+	let ts = Date.now()/1000;
+	let diff = ts - lastTs;
+	if (diff > 2){
+		console.log("########### time-tick-diff ########### >>>>:".red, diff);
+	}else{
+		timeDiffDumpCount++;
+		if (timeDiffDumpCount % 10 == 0){
+			timeDiffDumpCount = 0;
+			console.log("======== time-tick-diff =====:".green, diff);
+		}
+	}
+	lastTs = ts;
+}, 1000)
 
 const {FlowHttp} = require('@aspectron/flow-http')({
 	express,
