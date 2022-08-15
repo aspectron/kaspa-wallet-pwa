@@ -207,7 +207,7 @@ class KaspaPWA extends EventEmitter {
 				index: 'false'
 			}))
 			app.get('/api/health', async (req, res)=>{
-				let bdi = null;
+				let info = null;
 				let status = 200;
 				let session = req.session;
 				let tsDiff = (Date.now() - (session.healthResTs || 0))/1000;
@@ -217,16 +217,21 @@ class KaspaPWA extends EventEmitter {
 					res.status(504).send(JSON.stringify({code:"PLEASE-WAIT-20-SEC-FOR-BLOCK-INFO-REQUEST", isConnected}))
 					return
 				}
-				
-				bdi = await this.grpc.kaspad.request('getBlockDagInfoRequest')
+
+				info = await this.grpc.kaspad.request('getInfoRequest')
+					.then(i=>{
+						if (!i?.isSynced){
+							status = 502;
+						}
+						return i;
+					})
 				.catch((e)=>{
 					if ((e+"").includes("not connected")){
 						status = 500;
 						isConnected = false;
 					}
-					//console.log("bdi: e", e)
 				});
-				res.status(status).send(JSON.stringify({bdi, isConnected}))
+				res.status(status).send(JSON.stringify({info, isConnected}))
 			})
 			app.get('/kaspa-wallet-worker/worker.js', (req, res)=>{
 				res.sendFile(path.join(rootFolder, 'dist/kaspa-wallet-worker-core.js'))
