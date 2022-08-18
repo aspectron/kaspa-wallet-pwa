@@ -420,6 +420,7 @@ class KaspaPWA extends EventEmitter {
 			}
 		})();
 
+		/*
 		let getRequests = flowHttp.sockets.subscribe("faucet-request");
 		(async ()=>{
 			for await(const msg of getRequests) {
@@ -450,6 +451,7 @@ class KaspaPWA extends EventEmitter {
 				});
 			}
 		})();
+		*/
 	}
 
 	purgeCache() {
