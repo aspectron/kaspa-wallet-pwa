@@ -169,6 +169,7 @@ class KaspaPWA extends EventEmitter {
 					try {
 						let list = files.map(f=>{
 							let {version,name} = JSON.parse(fs.readFileSync(f,'utf8'));
+							console.log(`[version]: (${version}) for: ${f}`);
 							return {version,name};
 						});
 						let hash = crypto.createHash('sha256').update(list.map(info=>info.version).join('')).digest('hex').substring(0,16);
