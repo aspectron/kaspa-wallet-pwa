@@ -33,7 +33,7 @@ setInterval(()=>{
 		timeDiffDumpCount++;
 		if (timeDiffDumpCount % 10 == 0){
 			timeDiffDumpCount = 0;
-			console.log("======== time-tick-diff =====:".green, diff);
+			//console.log("======== time-tick-diff =====:".green, diff);
 		}
 	}
 	lastTs = ts;
