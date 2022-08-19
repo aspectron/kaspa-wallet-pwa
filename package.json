@@ -39,6 +39,8 @@
     "ws": "7.5.9"
   },
   "devDependencies": {
+    "acorn":"8.8.0",
+    "ajv":"6.12.6",
     "assert": "2.0.0",
     "crypto-browserify": "3.12.0",
     "process": "0.11.10",
