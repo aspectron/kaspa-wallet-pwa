@@ -169,7 +169,7 @@ class KaspaWalletApp extends FlowApp {
 
 		return html`
 		${isMobile?'':html`<!--kaspa-wallet-header></kaspa-wallet-header-->`}
-		<kaspa-wallet .walletMeta='${meta}' hidefaucet="true"></kaspa-wallet>
+		<kaspa-wallet .walletMeta='${meta}' reloadonlock="true" hidefaucet="true"></kaspa-wallet>
 		`
 	}
 
