@@ -6,3 +6,4 @@ dist
 __wallet.txt
 certificates
 .script-hash
+.DS_Store
