@@ -1,0 +1,28 @@
+
+sips -z 144 144 Icon1024.png --out ./icons/android-icon-144x144.png
+sips -z 192 192 Icon1024.png --out ./icons/android-icon-192x192.png
+sips -z 36 36 Icon1024.png --out ./icons/android-icon-36x36.png
+sips -z 48 48 Icon1024.png --out ./icons/android-icon-48x48.png
+sips -z 72 72 Icon1024.png --out ./icons/android-icon-72x72.png
+sips -z 96 96 Icon1024.png --out ./icons/android-icon-96x96.png
+sips -z 114 114 Icon1024.png --out ./icons/apple-icon-114x114.png
+sips -z 120 120 Icon1024.png --out ./icons/apple-icon-120x120.png
+sips -z 144 144 Icon1024.png --out ./icons/apple-icon-144x144.png
+sips -z 152 152 Icon1024.png --out ./icons/apple-icon-152x152.png
+sips -z 180 180 Icon1024.png --out ./icons/apple-icon-180x180.png
+sips -z 57 57 Icon1024.png --out ./icons/apple-icon-57x57.png
+sips -z 60 60 Icon1024.png --out ./icons/apple-icon-60x60.png
+sips -z 72 72 Icon1024.png --out ./icons/apple-icon-72x72.png
+sips -z 76 76 Icon1024.png --out ./icons/apple-icon-76x76.png
+sips -z 144 144 Icon1024.png --out ./icons/ms-icon-144x144.png
+sips -z 150 150 Icon1024.png --out ./icons/ms-icon-150x150.png
+sips -z 310 310 Icon1024.png --out ./icons/ms-icon-310x310.png
+sips -z 70 70 Icon1024.png --out ./icons/ms-icon-70x70.png
+
+sips -z 192 192 Icon1024.png --out ./icons/apple-icon-precomposed.png
+sips -z 192 192 Icon1024.png --out ./icons/apple-icon.png
+
+sips -z 16 16 logo512.png --out ./icons/favicon-16x16.png
+sips -z 32 32 logo512.png --out ./icons/favicon-32x32.png
+sips -z 96 96 logo512.png --out ./icons/favicon-96x96.png
+sips -z 192 192 logo512.png --out ./logo/kaspa-192x192-white.png

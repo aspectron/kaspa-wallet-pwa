@@ -88,11 +88,24 @@ class KaspaWalletApp extends FlowApp {
 
 	async initUI(){
 		this.bodyEl = document.body;
+		await this.getNetwork();
 		await this.initI18n();
 	}
 
+	async getNetwork(){
+		const { rpc } = flow.app;
+		let {network} = await rpc.request("get-network")
+		.catch((err)=>{
+			console.log("get-network:error", err)
+		});
+
+		if(network && this.network != network){
+			this.network = network;
+		}
+	}
+
 	async initI18n(){
-		i18n.setActiveLanguages(['en', 'ja', 'zh_HANS']);
+		i18n.setActiveLanguages(['en', 'ja', 'zh_HANS', 'ko']);
 		//i18n.setTesting(true);
 		const { rpc } = flow.app;
 		let {entries} = await rpc.request("get-app-i18n-entries")
@@ -156,7 +169,7 @@ class KaspaWalletApp extends FlowApp {
 
 		return html`
 		${isMobile?'':html`<!--kaspa-wallet-header></kaspa-wallet-header-->`}
-		<kaspa-wallet .walletMeta='${meta}'></kaspa-wallet>
+		<kaspa-wallet .walletMeta='${meta}' reloadonlock="true" hidefaucet="true"></kaspa-wallet>
 		`
 	}
 

@@ -20,6 +20,24 @@ const protoLoader = require('@grpc/proto-loader');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 const Decimal = require('decimal.js');
+//const child_process = require("node:child_process");
+let lastTs = Date.now()/1000;
+let timeDiffDumpCount = 0;
+
+setInterval(()=>{
+	let ts = Date.now()/1000;
+	let diff = ts - lastTs;
+	if (diff > 2){
+		console.log("########### time-tick-diff ########### >>>>:".red, diff);
+	}else{
+		timeDiffDumpCount++;
+		if (timeDiffDumpCount % 10 == 0){
+			timeDiffDumpCount = 0;
+			//console.log("======== time-tick-diff =====:".green, diff);
+		}
+	}
+	lastTs = ts;
+}, 1000)
 
 const {FlowHttp} = require('@aspectron/flow-http')({
 	express,
@@ -151,10 +169,11 @@ class KaspaPWA extends EventEmitter {
 					try {
 						let list = files.map(f=>{
 							let {version,name} = JSON.parse(fs.readFileSync(f,'utf8'));
+							console.log(`[version]: (${version}) for: ${f}`);
 							return {version,name};
 						});
 						let hash = crypto.createHash('sha256').update(list.map(info=>info.version).join('')).digest('hex').substring(0,16);
-						
+						fs.writeFileSync(".script-hash", hash);
 						let script = `\n\t<script>\n\t\twindow.PWA_MODULES={};\n\t\t${list.map(i=>`window.PWA_MODULES["${i.name}"] = "${i.version}";`).join('\n\t\t')}\n\t</script>`;
 						fs.readFile(indexFile,{encoding:'utf-8'}, (err, data)=>{
 							if(err)
@@ -188,6 +207,33 @@ class KaspaPWA extends EventEmitter {
 			app.use('/', express.static( path.join(rootFolder, "dist"), {
 				index: 'false'
 			}))
+			app.get('/api/health', async (req, res)=>{
+				let info = null;
+				let status = 200;
+				let session = req.session;
+				let tsDiff = (Date.now() - (session.healthResTs || 0))/1000;
+				session.healthResTs = Date.now();
+				let isConnected = this.grpc.kaspad.client.isConnected;
+				if (tsDiff < 20){
+					res.status(504).send(JSON.stringify({code:"PLEASE-WAIT-20-SEC-FOR-BLOCK-INFO-REQUEST", isConnected}))
+					return
+				}
+
+				info = await this.grpc.kaspad.request('getInfoRequest')
+					.then(i=>{
+						if (!i?.isSynced){
+							status = 502;
+						}
+						return i;
+					})
+				.catch((e)=>{
+					if ((e+"").includes("not connected")){
+						status = 500;
+						isConnected = false;
+					}
+				});
+				res.status(status).send(JSON.stringify({info, isConnected}))
+			})
 			app.get('/kaspa-wallet-worker/worker.js', (req, res)=>{
 				res.sendFile(path.join(rootFolder, 'dist/kaspa-wallet-worker-core.js'))
 			})
@@ -368,6 +414,14 @@ class KaspaPWA extends EventEmitter {
 			}
 		})();
 
+		let networkRequests = flowHttp.sockets.subscribe("get-network");
+		(async ()=>{
+			for await(const msg of networkRequests) {
+				msg.respond({network:this.grpc.network})
+			}
+		})();
+
+		/*
 		let getRequests = flowHttp.sockets.subscribe("faucet-request");
 		(async ()=>{
 			for await(const msg of getRequests) {
@@ -398,6 +452,7 @@ class KaspaPWA extends EventEmitter {
 				});
 			}
 		})();
+		*/
 	}
 
 	purgeCache() {
@@ -441,6 +496,7 @@ class KaspaPWA extends EventEmitter {
 					throw new Error(`Log level must be one of: ${logLevels.join(', ')}`);
 				return level;
 			})
+			.option('--restart-after <seconds>','auto kill after', false)
 			.option('--verbose','log wallet activity')
 			.option('--debug','debug wallet activity')
 			.option('--testnet','use testnet network')
@@ -477,6 +533,19 @@ class KaspaPWA extends EventEmitter {
 				await this.initRPC();
 				await this.initMonitors();
 				//await this.initWallet();
+				if(this.options.restartAfter){
+					let seconds = parseInt(this.options.restartAfter, 0);
+					console.log(`restarting in ${seconds} seconds....`)
+
+					setTimeout(async ()=>{
+						console.log("::::RESTART::::")
+						process.exit(0);
+						//kaspaPWA.flowHttp.server.close(()=>{
+						//	process.exit("RESTART");
+						//});
+					}, seconds * 1000)
+				}
+				
 			})
 
 		program.parse();
@@ -499,3 +568,13 @@ class KaspaPWA extends EventEmitter {
 		console.log(ex.toString());
 	}
 })();
+
+
+/*
+process.on('exit', (code) => {
+	if(code != 'RESTART')
+		return
+	//console.log("exit-code:"+code)
+	child_process.execSync("node pwa");
+})
+*/
