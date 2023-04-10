@@ -14,7 +14,7 @@
     "@aspectron/flow-http": ">=0.2.19",
     "@aspectron/flow-router": "*",
     "@aspectron/flow-utils": "*",
-    "@aspectron/flow-ux": "^1.0.6",
+    "@aspectron/flow-ux": "^1.1.1",
     "@kaspa/grpc": ">=1.4.0",
     "@kaspa/grpc-node": ">=1.0.8",
     "@kaspa/grpc-web": ">=1.0.2",
