@@ -1,6 +1,6 @@
 {
   "name": "@kaspa/wallet-pwa",
-  "version": "1.1.37",
+  "version": "1.1.38",
   "codename": "",
   "description": "Kaspa Wallet PWA",
   "main": "pwa.js",
@@ -20,7 +20,7 @@
     "@kaspa/grpc-web": ">=1.0.2",
     "@kaspa/ux": "file:../kaspa-ux",
     "@kaspa/wallet": ">=1.4.27",
-    "@kaspa/wallet-worker": ">=1.1.25",
+    "@kaspa/wallet-worker": ">=1.1.26",
     "@webcomponents/webcomponentsjs": "2.6.0",
     "buffer": "6.0.3",
     "cloudflare": "2.9.1",
